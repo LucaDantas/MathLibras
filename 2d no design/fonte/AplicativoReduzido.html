@@ -1,0 +1,118 @@
+﻿﻿
+<!DOCTYPE HTML>
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="../styles/botoes_jogo.css">
+<script src="Reduzido.js"></script>
+<body onkeydown="whichButton(event)">
+    <div>
+        <canvas id="myCanvas" width="400" height="375"></canvas>
+        <script src="http://www.fisicainvertida.com/PSlibrary/PSlibrary.js"></script>
+        <script src="javascriptBtn.js"></script>
+        <link rel="stylesheet" href="configplan.css">
+        <div class="instrucao" id="instrucoes">O objetivo do jogo é encontrar e alcançar com o personagem os pontos determinados no topo da tela.<br>
+            Para mover o personagem utilizam-se as teclas <b>A S D W</b> ou as setas direcionais do teclado.<br>
+            Para confirmar a sua posição utiliza-se a tecla <b>Q</b> ou a tecla <b>ENTER</b>.<br>
+            É pressionar apertar a tecla <b>R</b> para recomeçar a partida.<br>
+        </div>
+        <button class="btn" id="botao" onclick="iniciar()">Iniciar!</button>
+        <script>
+            var canvas = document.getElementById('myCanvas');
+            var ctx = canvas.getContext('2d');
+            //window.onload = init;
+            //
+            var Lx = 320;       //Largura do Sistema X
+            var Ly = 320;       //Largura do Sistema Y
+            var px = Lx/2 + 5;       //Centro do sistema X
+            var py = Ly/2 + 40;       //Centro do sistema Y
+            var PxC = px;       //Ponto inicial do personagem X
+            var PyC = py;       //Ponto inicial do personagem Y
+            var t = 3;      //Tamanho do nariz
+            var Rp = 10;       //Raio do círculo do personagem
+            var dir;       //Lógica para definir o lugar do nariz
+            var esq;       //Lógica para definir o lugar do nariz
+            var cima;      //Lógica para definir o lugar do nariz
+            var baixo;     //Lógica para definir o lugar do nariz
+            var msg_band = '';     //Mensagem mostrada ao tentar colocar a bandeira
+            var PxB;       //Ponto X da Bandeira
+            var PyB;       //Ponto Y da Bandeira
+            var num;       //Número sorteado aleatorio
+            var massa2;        //Auxiliar utilizada na conversão dos números aleatórios
+            var massa3;        //Auxiliar utilizada na conversão dos números aleatórios
+            var mudou = false;             //Lógica para determinar se o nível mudou
+            var i;
+            var acabou = false;
+            var button = document.querySelector('button#botao');
+            var div = document.querySelector('div#instrucoes');
+            var corTexto = bluecolor;       //Cor dos textos
+            var corPersonagem = darkblue;      //Cor do círculo do personagem
+            
+            function iniciar(){
+                setInterval(desenhar, 10);
+                button.remove();
+                div.remove();
+                document.querySelector("button#dir").style.display = "block";
+                document.querySelector("button#esq").style.display = "block";
+                document.querySelector("button#cima").style.display = "block";
+                document.querySelector("button#baixo").style.display = "block";
+                document.querySelector("button#conf").style.display = "block";
+                document.querySelector("button#rein").style.display = "block";
+            }
+            
+            function desenhar() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);   //Limpa a tela
+                //rectangle(0, 0, canvas.width, canvas.height, 1, nocolor, darkcolor);       //Quadrado ao redor da tela
+                for (i = 0; i <= 16; i++) {        //Eixo numerado X
+                    if (i < 3) {
+                        textbold(i - 8, '8', 'verdana', px - (Lx / 2) + i * 20 - 13, py + (Ly / 2) + 15, corTexto);
+                    } else if (i > 13) {
+                        textbold(i - 8, '8', 'verdana', px - (Lx / 2) + i * 20 - 8, py + (Ly / 2) + 15, corTexto);
+                    } else if (i < 8) {
+                        textbold(i - 8, '8', 'verdana', px - (Lx / 2) + i * 20 - 10, py + (Ly / 2) + 15, corTexto);
+                    } else if (i == 8) {
+                        textbold(i - 8, '8', 'verdana', px - (Lx / 2) + i * 20 - 5, py + (Ly / 2) + 15, corTexto);
+                    } else if (i > 8) {
+                        textbold(i - 8, '8', 'verdana', px - (Lx / 2) + i * 20 - 4, py + (Ly / 2) + 15, corTexto);
+                    }
+                }
+                for (i = 0; i <= 16; i++) {        //Eixo numerado Y
+                    textbold((i - 8)*(-1), '8', 'verdana', px + (Lx / 2) + 8, py - (Ly / 2) + i * 20 + 4, corTexto);
+                }
+                //ATENÇÃO!!! A COR É PADRÃO DA BIBLIOTECA NA FUNÇÃO ABAIXO
+                coordinateSistem(px, py, Lx, Ly, true, true, true, true, true);     //Sistema de coordenadas - A cor é padrão da função da biblioteca
+                circle(PxC, PyC, Rp, 0, corPersonagem, corPersonagem);      //Círculo do carinha
+                //IMPORTANTE!!!! ERRO NA FUNÇÃO ABAIXO
+                textbold(msg_band, '10', 'verdana', px - 138, py - (Ly/2) - 10, corTexto);  //AO MUDAR A COR DESSE TEXTO TAMBÉM MUDA A COR DAS SETAS DO EIXO
+                if (mudou == false) {
+                    mudar_nivel();
+                    mudou = true;
+                }
+                textbold('Ponto X: ' + ((PxB - px) / 20), '10', 'verdana', px - 90, py - (Ly / 2) - 28, corTexto);       //Coordenada da fase X
+                textbold('Ponto Y: ' + (-(PyB - py) / 20), '10', 'verdana', px + 10, py - (Ly / 2) - 28, corTexto);      //Coordenada da fase Y
+                if (cima == true) {
+                    triangle(PxC + t, PyC - 10, PxC, PyC - 10 - 5, PxC - t, PyC - 10, 2, corPersonagem, corPersonagem);     //Nariz (Cima)
+                }
+                if (baixo == true) {
+                    triangle(PxC + t, PyC + 10, PxC, PyC + 10 + 5, PxC - t, PyC + 10, 2, corPersonagem, corPersonagem);     //Nariz (Baixo)
+                }
+                if (dir == true) {
+                    triangle(PxC + 10, PyC + t, PxC + 10 + 5, PyC, PxC + 10, PyC - t, 2, corPersonagem, corPersonagem);     //Nariz (Direita)
+                }
+                if (esq == true) {
+                    triangle(PxC - 10, PyC - t, PxC - 10 - 5, PyC, PxC - 10, PyC + t, 2, corPersonagem, corPersonagem);     //Nariz (Esquerda)
+                }
+            }
+            canvas.onmousedown = cliquemouse;
+            
+            // ------------------------------------------------------------------------------------------
+        </script>
+        <button class="btn2" id="dir" onclick="mover_px_dir()" style="position: absolute; top: 150px; left: 620px; display: none;">Direita</button>
+        <button class="btn2" id="esq" onclick="mover_px_esq()" style="position: absolute; top: 150px; left: 380px; display: none;">Esquerda</button>
+        <button class="btn2" id="cima" onclick="mover_py_cima()" style="position: absolute; top: 70px; left: 500px; display: none;">Acima</button>
+        <button class="btn2" id="baixo" onclick="mover_py_baixo()" style="position: absolute; top: 150px; left: 500px; display: none;">Abaixo</button>
+        <button class="btn2" id="conf" onclick="checkpoint()" style="position: absolute; top: 250px; left: 420px; display: none;">Confirmar</button>
+        <button class="btn2" id="rein" onclick="reiniciar()" style="position: absolute; top: 250px; left: 580px; display: none;">Reiniciar</button>
+    </div>
+    
+</body>
+</html> 
