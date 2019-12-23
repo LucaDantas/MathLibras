@@ -1,0 +1,153 @@
+<!DOCTYPE HTML>
+<html>
+<link rel="stylesheet" type="text/css" href="styles/mainbuttons.css">
+<link rel="stylesheet" href="classes.css">
+<body onkeydown="whichButton(event)" id="principal" onload="desenhar()" ontouchstart="touchCell(event)" ontouchmove="touchCell(event)" style="height: 360px; width: 640px;">
+    <canvas id="myCanvas" width="640px" height="360" onmousemove="listener(event)" onmousedown="clicked()" onmouseup="noclicked()"></canvas>
+    <!-- <script src="PSlibrary.js"></script> -->
+    <script src="BibliotecaGeraldo/PSlibrary.js"></script>
+    <!-- <script src="http://www.fisicainvertida.com/PSlibrary/PSlibrary.js"></script> -->
+    <script>
+        var canvas = document.getElementById('myCanvas');
+        var ctx = canvas.getContext('2d');
+        //------------------------------------------------------------->
+        var PxS = 310;          //Ponto X da superfície
+        var PyS = 250;          //Ponto Y da parte inferior da superfície
+        var tam_s = 180;        //Tamanho da superfície
+        var rotation = 270;     //Rotação da superfície
+        var PxF = 50;          //Ponto X da fonte luminosa
+        var PyF = 140;          //Ponto Y da fonte luminosa
+        var nPontos = 2;        //Define a quantidade de raios de luz
+        var PxI = [];           //Array dos pontos da incidência da luz no eixo X
+        var PyI = [];           //Array dos pontos de incidência da luz no eixo Y
+        var Dy = [];            //Diferenças das alture=as dos pontos de incidência e da fonte luminosa
+        var Dx = [];            //Diferença do eixo X do ponto de incidênccia e da fonte luminosa 
+        var tamRaioRef = 250;   //Tamanho do Raio refletido
+        var tamRaio = [];       //Tamanho do raio de luz baseado na distância dos pontos no eixo X e Y
+        var angInc = []         //Valor do ângulo de incidência de cada raio de luz
+        var divs = (tam_s - 60) / (nPontos-1);   //Divisões da Superfície em função dos raios de luz selecionados
+        var PxFI = 2*PxS - PxF; //Ponto X da Fonte de luz imaginária
+        var PyFI = PyF;         //Ponto Y da Fonte Imaginária
+        var x;                  //Variável do ouvinte do mouse no eixo X
+        var y;                  //Variável do ouvinte do mouse no eixo Y
+        var ver = false;        //Teste se o mouse está presssionado na fonte
+        var verIn = [];      //Teste se o mouse está pressionado nos pontos de incidência
+        var test_fonte;         //Teste da posição do mouse
+        var lim_fonte;          //Limite da posição da fonte   
+        var lim_pontos;   
+        var test_ponto = [];
+        var PxG = 10;           //Posição da grid em X
+        var PyG = (canvas.height-PyS)/2 + PyS;  //Posição da grid em Y
+        var tamXG = (PxS - 10) * 2 / 20;    //Define o tamanho da grid no eixo X
+        var tamYG = (PyG - 45) / 20;        //Define o tamanho da grid no eixo Y
+        var normal = false;                 //Variável para definir a visibilidade da reta normal
+        var transf = false;                 //Variável para definir a visibilidade do transferidor
+        for(var i = 0; i < nPontos; i++){
+            PxI[i] = PxS;
+            PyI[i] = PyS - divs*(i) - 30;
+            Dy[i] = PyF - PyI[i];
+            Dx[i] = PxF - PxI[i];
+            tamRaio[i] = Math.sqrt(Math.pow(Dy[i],2) + Math.pow(Dx[i],2));
+            angInc[i] = (Math.atan(Dy[i]/Dx[i]) * 180/Math.PI);
+            verIn[i] = false;
+        }
+        
+        function retaNormal(){
+            if(normal) normal = false;
+            else normal = true;
+            desenhar();
+        }
+        
+        function Transferidor(){
+            if(transf) transf = false;
+            else transf = true;
+            desenhar();
+        }
+        
+        function definir() {
+            for(var i = 0; i < nPontos; i++){
+                // PxI[i] = PxS;
+                // PyI[i] = PyS - divs*(i) - 30;
+                Dy[i] = PyF - PyI[i];
+                Dx[i] = PxF - PxI[i];
+                tamRaio[i] = Math.sqrt(Math.pow(Dy[i],2) + Math.pow(Dx[i],2));
+                angInc[i] = (Math.atan(Dy[i]/Dx[i]) * 180/Math.PI);
+            }
+            PxFI = 2*PxS - PxF;
+            PyFI = PyF;
+        }
+        
+        function listener(e) {
+            x = e.clientX -5;
+            y = e.clientY - 5;
+            test_fonte = (x >= PxF - 10 && x <= PxF + 10 && y >= PyF - 10 && y <= PyF + 10);
+            lim_fonte = (x < PxS - 40 && y < PyS + (canvas.height - PyS) / 2 && x > PxG && y > 45);
+            lim_pontos = (y < PyS && y > PyS - tam_s);
+            for(var i = 0; i < nPontos; i++){
+                test_ponto[i] = (x >= PxI[i] - 10 && x <= PxI[i] + 10 && y >= PyI[i] - 4 && y <= PyI[i] + 4);
+            }
+            
+            if(ver && lim_fonte){
+                PxF = x;
+                PyF = y;
+            }
+            for(var i = 0; i < nPontos; i++){
+                if(verIn[i] && lim_pontos){
+                    PyI[i] = y;
+                }
+            }
+            if(test_fonte || test_ponto[0] || test_ponto[1] || test_ponto[2] || test_ponto[3] ||test_ponto[4]){
+                document.getElementById("principal").style.cursor = "pointer";
+            }
+            else{
+                document.getElementById("principal").style.cursor = "auto";
+            }
+            desenhar();
+            definir();
+        }
+        
+        function clicked() {
+            if(test_fonte){
+                ver = true;
+            }
+            for(var i = 0; i < nPontos; i++){
+                if(test_ponto[i]){
+                    verIn[i] = true;
+                }
+            }
+        }
+        
+        function noclicked() {
+            ver = false;
+            for(var i = 0; i < nPontos; i++){
+                verIn[i] = false;
+            }
+        }
+        
+        function desenhar() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);       //Limpa a tela
+            //rectangle(0, 0, canvas.width, canvas.height, 1, nocolor, darkcolor);
+            grid(PxG,PyG,tamXG,tamYG,2,'#dfe6e9');       //Grade 
+            line(PxS - 40, PyG, PxS - 40, 45, 2, '#fab1a0');
+            surface(PxS, PyS, tam_s, rotation, darkcolor);          //Desenha a superfície
+            for(var i = 0; i < nPontos; i++){
+                line(PxF, PyF, PxI[i], PyI[i], 2, '#FAA945');
+                vector1(PxI[i], PyI[i], tamRaioRef, 180 - angInc[i], 2, '#FAC429');
+                cutline(PxI[i], PyI[i], tamRaio[i],-angInc[i], 1.5, '#FAC429');
+                if(normal){
+                    cutline(PxI[i], PyI[i], 50, 180, 1.5, 'red');
+                }
+                if(transf){
+                    transferidor(PxI[i],PyI[i],50);
+                }
+                circle(PxI[i], PyI[i], 3.5, 1, '#e17055', '#e17055');
+            }
+            circle(PxF, PyF, 4.5, 1, '#30336b', '#30336b');
+            circle(PxFI, PyFI, 4.5, 1, '#30336b', '#30336b');
+        }
+        //setInterval(desenhar,10);
+    </script>
+    <button class="confirmar" onclick="retaNormal()" style="position: absolute; top: 314px; left: 20px;">Reta Normal</button>
+    <button class="confirmar" onclick="Transferidor()" style="position: absolute; top: 314px; left: 150px;">Transferidor</button>
+</body>
+</html>
