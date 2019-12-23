@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8"/>
+  <title>Título</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="../styles/main.css"/>
+  <script src="../js/navegacao.js"></script>
+</head>
+<body onkeydown="whichButton(event)">
+  <!-------------------------------------------------------------->
+  <header>
+    <h1><a href="napalmadamao.ifrn.edu.br"><img src="../images/logo.png" alt="logo do site"/>EDUCAÇÃO NA <br/>PALMA DA MÃO</a></h1>
+    <h2>Repositório de objetos de aprendizagem</h2>
+    <nav>
+      <ol>
+        <li><a href="#">AULAS</a></li>
+        <li><a href="#">ANIMAÇÕES</a></li>
+        <li><a href="#">LISTAS</a></li>
+        <li><a href="#">OBJETOS</a></li>
+      </ol>
+    </nav>
+  </header>
+  <!-- -----------------------------1-------------------------------- -->
+  <section>
+    <div class="mySlides">
+      <div class="numbertext">1 / 10</div>
+      <!--                               Exemplo OBJETO                 -->
+      <!-- <object data="nome do arquivo".html" width="640px" height="340px" style="border: none;"></object> -->
+    </div>
+    <!------------------------------2-------------------------------->
+    <div class="mySlides">
+      <div class="numbertext">2 / 10</div>
+    
+    </div>
+    <!------------------------------3-------------------------------->
+    <div class="mySlides">
+      <div class="numbertext">3 / 10</div>
+     
+    </div>
+    <!------------------------------4-------------------------------->
+    <div class="mySlides">
+      <div class="numbertext">4 / 10</div>
+     
+    </div>
+    <!------------------------------5-------------------------------->
+    <div class="mySlides">
+      <div class="numbertext">5 / 10</div>
+     
+    </div>
+    <!------------------------------6-------------------------------->
+    <div class="mySlides">
+      <div class="numbertext">6 / 10</div>
+      
+    </div>
+    <!------------------------------7-------------------------------->
+    <div class="mySlides">
+      <div class="numbertext">7 / 10</div>
+      
+    </div>
+    <!------------------------------8-------------------------------->
+    <div class="mySlides">
+      <div class="numbertext">8 / 10</div>
+     
+    </div> 
+    <!------------------------------9-------------------------------->
+     <div class="mySlides">
+      <div class="numbertext">9 / 10</div>
+      
+    </div> 
+    <!------------------------------10------------------------------->
+    <div class="mySlides">
+      <div class="numbertext">10 / 10</div>
+     
+    </div>
+    <!--                          paginação                 -->
+    <div class="paginacao"> 
+      <button class="prev" onclick="reduzir(-1)"></button>
+      <ol>
+            <li><a class="dot" onclick="currentSlide(1)"></a></li>
+            <li><a class="dot" onclick="currentSlide(2)"></a></li>
+            <li><a class="dot" onclick="currentSlide(3)"></a></li>
+            <li><a class="dot" onclick="currentSlide(4)"></a></li>
+            <li><a class="dot" onclick="currentSlide(5)"></a></li>
+            <li><a class="dot" onclick="currentSlide(6)"></a></li>
+            <li><a class="dot" onclick="currentSlide(7)"></a></li>
+            <li><a class="dot" onclick="currentSlide(8)"></a></li>
+            <li><a class="dot" onclick="currentSlide(9)"></a></li>
+            <li><a class="dot" onclick="currentSlide(10)"></a></li>
+      </ol>      
+      <button class="next" onclick="avancar(1)"></button>
+    </div>
+  </section>
+  <!--------------------------------------------------------->
+  <script>
+    var slideIndex = 1;
+    showSlides(slideIndex);
+  </script>
+</body>
+</html>

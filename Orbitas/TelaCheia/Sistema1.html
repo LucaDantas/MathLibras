@@ -1,0 +1,106 @@
+<!DOCTYPE HTML>
+<html>
+<link rel="stylesheet" type="text/css" href="mainbuttons.css">
+<link rel="stylesheet" href="classes.css">
+<body onkeydown="whichButton(event)" id="principal" onload="desenhar()" ontouchstart="touchCell(event)" ontouchmove="touchCell(event)" style="height: 360px; width: 1000px;">
+    <canvas id="myCanvas" width="648" height="380" onmousemove="listener(event)" onmousedown="clicked()" onmouseup="noclicked()"></canvas>
+    <!-- <script src="PSlibrary.js"></script> -->
+    <!-- <script src="BibliotecaGeraldo/PSlibrary.js"></script> -->
+    <script src="http://www.fisicainvertida.com/PSlibrary/PSlibrary.js"></script>
+    <script>
+        var canvas = document.getElementById('myCanvas');
+        var ctx = canvas.getContext('2d');
+        //------------------------------------------------------------->
+        
+        var PxC = 250;          //Ponto X do centro do sistema 1
+        var PyC = 190;          //Ponto Y do centro do sistema 1
+        var OrbTerra = 108;     //Raio da orbita da terra
+        var OrbMarte = OrbTerra * 1.5;  //Raio da orbita de marte
+        var rSol = 24;          //Raio do sol
+        var rTerra = 6.4;        //Raio do sol - O raio está fora de escala em relação ao sol pois seria mais que 100 vezes menor
+        var rMarte = rTerra/2;  //Raio do sol - O raio está fora de escala em relação ao sol pois seria mais que 100 vezes menor
+        var wTerra = 0.025;         //Velocidade angular da terra
+        var wMarte = wTerra*0.5316;     //Velocidade angular de marte    
+        var PxT = PxC + OrbTerra;       //Posição inicial em X da terra       
+        var PyT = PyC;                  //Posição inicial em Y da terra
+        var PxM = PxC + OrbMarte;       //Posição inicial em X de marte no primeiro sistema
+        var PyM = PyC;                  //Posição inicial em Y de marte no primeiro sistema
+        var t1 = 0;                      //Contador do tempo para definir as posições de Marte e da Terra do sistema 1
+        var ini = true;
+        var orb = false;
+        var phiM = 0;
+        var phiT = 0;
+        
+        function Orbitas(){
+            if(orb) orb = false;
+            else orb = true;
+            if(ini) draw(S1);
+        }
+        
+        function ActvS1(){
+            if(ini){
+                setInterval(S1,20);
+                ini = false;
+            }
+        }   
+        
+        function S1(){
+            ctx.clearRect(0, 0, canvas.width, canvas.height);       //Limpa a tela
+            if(orb){
+                circle(PxC, PyC, OrbTerra, 2, nocolor, 'lightgrey');
+                circle(PxC, PyC, OrbMarte, 2, nocolor, 'lightgrey');
+            }
+            circle(PxC, PyC, rSol, 0, 'orange', 'orange');
+            circle(PxT, PyT, rTerra, 0, 'blue', 'blue');
+            circle(PxM, PyM, rMarte, 0, 'brown', 'brown');
+            if(ini == false){
+                t1++;
+                PxT = OrbTerra*Math.cos(t1*wTerra + phiT)+PxC;
+                PyT = OrbTerra*Math.sin(t1*wTerra + phiT)+PyC;
+                PxM = OrbMarte*Math.cos(t1*wMarte + phiM)+PxC;
+                PyM = OrbMarte*Math.sin(t1*wMarte + phiM)+PyC;
+            }
+        }
+        S1();
+    </script>
+    <button class="confirmar" onclick="ActvS1()" style="position: absolute; top: 600px; left: 20px;">Sistema 1</button>
+    <button class="confirmar" onclick="Orbitas()" style="position: absolute; top: 600px; left: 220px;">Órbitas</button>
+</body>
+</html>
+
+
+
+
+
+
+
+
+<!-- O que não vou usar mas pra deixar salvo -->
+<!-- // if(tMarte){
+    //     for(var i = 0; i < cont; i++){
+        //         circle(pXMarte[i], pYMarte[i], 3, 1, 'lightgrey', 'lightgrey');
+        //     }
+        // }
+        // if(t%ritmo == 0 && cont < 150){
+            //     cont++;
+            //     pXMarte[t/ritmo] = PxM2;
+            //     pYMarte[t/ritmo] = PyM2;
+            // } -->
+            
+            <!-- // line(PxT, PyT, PxC, PyC, 1, 'red');
+                // line(PxT, PyT, PxM, PyM, 1, 'red');
+                // line(PxM, PyM, PxC, PyC, 1, 'red'); -->
+                
+                <!-- 
+                    function Orbitas(){
+                        if(orb) orb = false;
+                        else orb = true;
+                    }
+                    
+                    function Marte(){
+                        if(tMarte) tMarte = false;
+                        else tMarte = true;
+                    }
+                -->
+                <!--  <button class="confirmar" onclick="Orbitas()" style="position: absolute; top: 600px; left: 20px;">Órbitas</button>
+                    <button class="confirmar" onclick="Marte()" style="position: absolute; top: 600px; left: 220px;">Trajetória de Marte</button> -->

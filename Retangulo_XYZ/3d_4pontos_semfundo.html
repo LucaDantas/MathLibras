@@ -1,0 +1,270 @@
+﻿<!DOCTYPE HTML>
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="mainbuttons.css">
+<link rel="stylesheet" href="classes.css">
+<body onkeydown="whichButton(event)">
+    <div class="fundo">
+        <canvas id="myCanvas" width="640" height="360"></canvas>
+        <!-- <script src="C:\Users\dell\Documents\HTML5\PSlibrary\PSlibrary\PSlibrary.js"></script>
+            <script src="PSlibrary.js"></script> -->
+            <script src="http://www.fisicainvertida.com/PSlibrary/PSlibrary.js"></script>
+            <link rel="stylesheet" href="configplan.css">
+            <script>
+                var canvas = document.getElementById('myCanvas');
+                var ctx = canvas.getContext('2d');
+                //---------------------------------------------------
+                var px = 235;       //Centro em x do sistema de coordenadas
+                var py = 165;       //Centro em y do sistema de coordenadas
+                var Lx = 280;       //Largura do sistema em x(de uma ponta a outra)
+                var Ly = Lx;        //Largura do sistema em y(de uma ponta a outra)
+                var alpha = 0.75;      //Transparência do sistema de coordenadas
+                var angulo = -32;    //Angulo da linha Z em relação ao eixo (x) - O valor inidicado é 32 graus mas o resultado é 30 graus
+                var angulo_rad = Math.abs(angulo * 3.14 / 180);     //Angulo convertido em radiano para o calculo do valor de x e y com base na variação em z
+                var angulo_cont = -180 + angulo;        //Angulo da segunda linha (cintrario ao angulo da primeira) do eixo z
+                var tam_reta = Lx / 2;        //Tamanho da reta do eixo z
+                //var PxC = px;       //Posição inicial do circulo X
+                //var PyC = py;       //Posição inicial do circulo Y
+                var z = 0;      //Valor inicial de Z
+                var x = 0;      //Valor inicial de X
+                var y = 0;      //Valor inicial de Y
+                // var xz = 0;     //Valor da variação em x com base no movimento em X
+                // var yz = 0;     //Valor da variação em x com base no movimento em Y
+                // var tam_b;      //Tamanho da bola
+                var cor_bola = '#0abde3';       //Cor do Círculo
+                var cor_linha = '#00d2d3';
+                var cor_linha2 = 'rgba(44, 62, 80, 0.75)';      //Linha no eixo X
+                var cor_linha3 = 'rgba(44, 62, 80, 0.5)';       //Linha do quadriculados
+                var checkBox01;     //Variáveis do CheckBox
+                var checkBox02;
+                var checkBox03;
+                var checkBox04;
+                var cont1 = true;       //Contadores usados para os checkbox
+                var cont2 = true;
+                var cont3 = true;
+                var cont4 = true;
+                var h = true;       //Booleana para determinar se um ponto ja foi mexido
+                var i;         //Contadora usada nos for
+                var tam_b = new Array(4);      //Tamanho da bola
+                var z = new Array(4);      //Valor inicial de Z
+                var x = new Array(4);      //Valor inicial de X
+                var y = new Array(4);      //Valor inicial de Y
+                var xz = new Array(4);     //Valor da variação em x com base no movimento em X
+                var yz = new Array(4);     //Valor da variação em x com base no movimento em Y
+                var PxC = new Array(4);     //Vetores das posições das bolas - Eixo X
+                var PyC = new Array(4);     //Vetores das posições das bolas - Eixo Y
+                var visualizar = false;
+                for (i = 0; i <= 3; i++) {         //Declarando os vetores utilizados
+                    PxC[i] = px;
+                    PyC[i] = py;
+                    z[i] = 0;           
+                    x[i] = 0;
+                    y[i] = 0;
+                    xz[i] = 0;
+                    yz[i] = 0;
+                    tam_b[i] = 5;
+                }
+                //Botões do checkbox
+                function cb1(){     
+                    cont1 = true;
+                    cont2 = false;
+                    cont3 = false;
+                    cont4 = false;
+                    checkBox02.checked = false;
+                    checkBox03.checked = false;                   
+                    checkBox04.checked = false;
+                    h = true;
+                }
+                function cb2(){
+                    cont1 = false;
+                    cont2 = true;
+                    cont3 = false;
+                    cont4 = false;
+                    checkBox01.checked = false;
+                    checkBox03.checked = false;                   
+                    checkBox04.checked = false;
+                    h = true;
+                }
+                function cb3(){
+                    cont1 = false;
+                    cont2 = false;
+                    cont3 = true;
+                    cont4 = false;
+                    checkBox01.checked = false;
+                    checkBox02.checked = false;                   
+                    checkBox04.checked = false;
+                    h = true;
+                }
+                function cb4(){
+                    cont1 = false;
+                    cont2 = false;
+                    cont3 = false;
+                    cont4 = true;
+                    checkBox01.checked = false;
+                    checkBox02.checked = false;                   
+                    checkBox03.checked = false;
+                    h = true;
+                }
+                
+                function quadrado(){
+                    if(visualizar == false){
+                        visualizar = true;
+                    }else{
+                        visualizar = false;
+                    }
+                }
+                
+                function confirmar(){
+                    if( (x[0] == x[3] && x[2] == x[1] && y[0] == y[1] && y[2] == y[3]) || (x[0] == x[1] && x[2] == x[3] && y[0] == y[3] && y[1] == y[2]) ){
+                        if( (x[0] != 0 || x[1] != 0 || x[2] != 0 || x[3] != 0) && (y[0] != 0 || y[1] != 0 || y[2] != 0 || y[3] != 0) && z[0] == z[1] && z[1] == z[2] && z[2] == z[3]) {
+                            window.alert("Retângulo no eixo XY");
+                        }
+                    }
+                    if( (z[0] == z[3] && z[1] == z[2] && y[0] == y[1] && y[2] == y[3]) || (z[0] == z[1] && z[2] == z[3] && y[0] == y[3] && y[1] == y[2]) ){
+                        if( (z[0] != 0 || z[1] != 0 || z[2] != 0 || z[3] != 0) && (y[0] != 0 || y[1] != 0 || y[2] != 0 || y[3] != 0) && x[0] == x[1] && x[1] == x[2] && x[2] == x[3]){
+                            window.alert("Retângulo no eixo YZ");
+                        }
+                    }
+                    if( (x[0] == x[3] && x[2] == x[1] && y[0] == z[1] && z[2] == z[3]) || (x[0] == x[1] && x[2] == x[3] && z[0] == z[3] && z[1] == z[2]) ){
+                        if( (x[0] != 0 || x[1] != 0 || x[2] != 0 || x[3] != 0) && (z[0] != 0 || z[1] != 0 || z[2] != 0 || z[3] != 0) && y[0] == y[1] && y[1] == y[2] && y[2] == y[3]){
+                            window.alert("Retângulo no eixo XZ");
+                        }
+                    }
+                }
+                
+                function desenhar() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);       //Limpa a tela
+                    rectangle(0, 0, canvas.width, canvas.height, 2.5, nocolor, darkcolor);      //Marcação das bordas da tela
+                    //QUADRICULADO DO EIXO X
+                    for (var i = -3; i <= 3; i++) {
+                        lineAngle(px + (Lx / 7) * i, py, tam_reta, angulo, 0.5, cor_linha3);      //Quadriculado no eixo X Vertical (Z<0)
+                        lineAngle(px + (Lx / 7) * i, py, tam_reta, angulo_cont, 0.5, cor_linha3);      //Quadriculado no eixo X Vertical (Z>0)
+                        lineAngle(px - (Lx / 2) - (Lx / 7) * i * (Math.cos(angulo_rad)), py + (Lx / 7) * i * (Math.sin(angulo_rad)), 2 * tam_reta, 0, 0.5, cor_linha3);      //Quadriculado no eixo X Horizontal(X<0)
+                    }
+                    //VARIÁVEIS DO CHECKBOX
+                    checkBox01 = document.getElementById("p1");
+                    checkBox02 = document.getElementById("p2");
+                    checkBox03 = document.getElementById("p3");
+                    checkBox04 = document.getElementById("p4");
+                    if (checkBox01.checked == true && cont1 == true) {
+                        if(h == true){
+                            document.getElementById("eixoX").value = x[0];
+                            document.getElementById("eixoY").value = y[0];
+                            document.getElementById("eixoZ").value = z[0];
+                            h = false;
+                        }
+                        x[0] = document.getElementById("eixoX").value / 1;
+                        y[0] = document.getElementById("eixoY").value / 1;
+                        z[0] = document.getElementById("eixoZ").value / 1;
+                        // TRANSORMA O VALOR DE Z NOS EIXOS X E Y
+                        xz[0] = Math.cos(angulo_rad) * -z[0];
+                        yz[0] = Math.sin(angulo_rad) * -z[0];
+                        //DEFININDO O TAMANHO DA BOLINHA DE ACORDO COM O Z
+                        tam_b[0] = 5 + z[0] / 80;
+                    }
+                    if (checkBox02.checked == true && cont2 == true) {
+                        if(h == true){
+                            document.getElementById("eixoX").value = x[1];
+                            document.getElementById("eixoY").value = y[1];
+                            document.getElementById("eixoZ").value = z[1];
+                            h = false;
+                        }
+                        x[1] = document.getElementById("eixoX").value / 1;
+                        y[1] = document.getElementById("eixoY").value / 1;
+                        z[1] = document.getElementById("eixoZ").value / 1;
+                        // TRANSORMA O VALOR DE Z NOS EIXOS X E Y
+                        xz[1] = Math.cos(angulo_rad) * -z[1];
+                        yz[1] = Math.sin(angulo_rad) * -z[1];
+                        //DEFININDO O TAMANHO DA BOLINHA DE ACORDO COM O Z
+                        tam_b[1] = 5 + z[1] / 80;
+                    }
+                    if (checkBox03.checked == true && cont3 == true) {
+                        if(h == true){
+                            document.getElementById("eixoX").value = x[2];
+                            document.getElementById("eixoY").value = y[2];
+                            document.getElementById("eixoZ").value = z[2];
+                            h = false;
+                        }
+                        x[2] = document.getElementById("eixoX").value / 1;
+                        y[2] = document.getElementById("eixoY").value / 1;
+                        z[2] = document.getElementById("eixoZ").value / 1;
+                        // TRANSORMA O VALOR DE Z NOS EIXOS X E Y
+                        xz[2] = Math.cos(angulo_rad) * -z[2];
+                        yz[2] = Math.sin(angulo_rad) * -z[2];
+                        //DEFININDO O TAMANHO DA BOLINHA DE ACORDO COM O Z
+                        tam_b[2] = 5 + z[2] / 80;
+                    }
+                    if (checkBox04.checked == true && cont4 == true) {
+                        if(h == true){
+                            document.getElementById("eixoX").value = x[3];
+                            document.getElementById("eixoY").value = y[3];
+                            document.getElementById("eixoZ").value = z[3];
+                            h = false;
+                        }
+                        x[3] = document.getElementById("eixoX").value / 1;
+                        y[3] = document.getElementById("eixoY").value / 1;
+                        z[3] = document.getElementById("eixoZ").value / 1;
+                        // TRANSORMA O VALOR DE Z NOS EIXOS X E Y
+                        xz[3] = Math.cos(angulo_rad) * -z[3];
+                        yz[3] = Math.sin(angulo_rad) * -z[3];
+                        //DEFININDO O TAMANHO DA BOLINHA DE ACORDO COM O Z
+                        tam_b[3] = 5 + z[3] / 80;
+                    }
+                    if(visualizar){
+                        line(PxC[0] + x[0] + xz[0], PyC[0] - y[0] - yz[0], PxC[1] + x[1] + xz[1], PyC[1] - y[1] - yz[1], 1, cor_linha);
+                        line(PxC[1] + x[1] + xz[1], PyC[1] - y[1] - yz[1], PxC[2] + x[2] + xz[2], PyC[2] - y[2] - yz[2], 1, cor_linha);
+                        line(PxC[2] + x[2] + xz[2], PyC[2] - y[2] - yz[2], PxC[3] + x[3] + xz[3], PyC[3] - y[3] - yz[3], 1, cor_linha);
+                        line(PxC[3] + x[3] + xz[3], PyC[3] - y[3] - yz[3], PxC[0] + x[0] + xz[0], PyC[0] - y[0] - yz[0], 1, cor_linha);
+                    }
+                    
+                    //
+                    lineAngle(px, py, tam_reta, angulo, 1.5, cor_linha2);      //Desenha a linha do eixo Z no quadrante superior
+                    vector1(px, py, tam_reta, angulo_cont, 1.5, cor_linha2);    //Desenha a linha do eixo Z no quadrante inferior
+                    coordinateSistem(px, py, Lx, Ly, alpha, false, false, false, false);        //Desenha o sistema de coordenadas X e Y
+                    //
+                    for (i = 0; i <= 3; i++) {         //Desenhando os pontos
+                        circle(PxC[i] + xz[i] + x[i], PyC[i] - yz[i] - y[i], tam_b[i], 1, cor_bola, cor_bola);      //Desenha o círculo do personagem
+                    }
+                }
+                setInterval(desenhar, 10);       //indica o tempo de repetição da função desenhar
+            </script>
+            <!--Botões usados para alterar os valores de X Y e Z-->
+            <div class="tituloSlider" style="top:100px; left:500px">Eixo X</div>
+            <input class="slider" type="range" id="eixoX" min="-120" max="120" step="10" value="0" style="position: absolute; left:500px; top:120px; width:100px">
+            
+            <div class="tituloSlider" style="top:160px; left:500px">Eixo Y</div>
+            <input class="slider" type="range" id="eixoY" min="-120" max="120" step="10" value="0" style="position: absolute; left:500px; top:180px; width:100px">
+            
+            <div class="tituloSlider" style="top:220px; left:500px">Eixo Z</div>
+            <input class="slider" type="range" id="eixoZ" min="-120" max="120" step="10" value="0" style="position: absolute; left:500px; top:240px; width:100px">
+            
+            <!-- CHECKBOX -->
+            
+            <div class="tituloSlider" style="top:325px; left:465px">A</div>
+            <label class="switch" style="position: absolute; top:340px; left: 450px;">
+                <input type="checkbox" id="p1" onclick="cb1()">
+                <span class="check round"></span>
+            </label>
+            <div class="tituloSlider" style="top:325px; left:515px">B</div>
+            <label class="switch" style="position: absolute; top:340px; left: 500px;">
+                <input type="checkbox" id="p2" onclick="cb2()">
+                <span class="check round"></span>
+            </label>
+            <div class="tituloSlider" style="top:325px; left:565px">C</div>
+            <label class="switch" style="position: absolute; top:340px; left: 550px;">
+                <input type="checkbox" id="p3" onclick="cb3()">
+                <span class="check round"></span>
+            </label>
+            <div class="tituloSlider" style="top:325px; left:615px">D</div>
+            <label class="switch" style="position: absolute; top:340px; left: 600px;">
+                <input type="checkbox" id="p4" onclick="cb4()">
+                <span class="check round"></span>
+            </label>  
+            <label class="container" style="position: absolute; top: 30px; left: 503px;">Desenho
+                <input type="checkbox" onclick="quadrado()">
+                <span class="checkmark"></span>
+            </label>     
+            <button class="confirmar" onclick="confirmar()" style="position: absolute; top: 314px; left: 20px;">Confirmar</button>      
+        </div>
+    </body>
+    </html>

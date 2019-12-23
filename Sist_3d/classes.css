@@ -1,0 +1,95 @@
+.btnIniciar {
+	position:absolute;
+	width:60px;
+	height:25px;		
+	border-radius: 5px;
+	color:white;
+	font-size: 13px;	
+	font-family: Helvetica, Arial, sans-serif;
+}
+
+.btnIniciar:hover {
+	cursor: pointer;
+	color:#2c3e50;
+	background: white;
+	outline: none;
+}
+
+.btnIniciar:active { 
+  outline: none;
+}
+
+.blue{
+	border: 2px solid #2980b9;
+	background-color:#2980b9;
+}
+
+.orange{
+	border: 2px solid #d35400;
+	background-color:#d35400;
+}
+
+.green {
+	border: 2px solid #16a085;
+	background-color:#16a085;
+}
+
+.elementos {
+	background-color:#576574;
+	position:absolute;
+	width:160px;
+	height:25px;		
+	border-radius: 5px;
+	border: 2px solid #576574;	
+	color:white;
+	font-size: 13px;	
+	font-family: Helvetica, Arial, sans-serif;
+}
+
+.elementos:hover {
+	cursor: pointer;
+	color:#2c3e50;
+	background: white;
+	outline: none;
+}
+
+.elementos:active { 
+	background: #dfe6e9;
+	//color:white;
+}
+
+.checkbox{
+	position:absolute;		 
+	padding: 8px 10px 10px 30px;	
+	text-align:left;
+	color: #2c3e50;
+	letter-spacing: 2px;
+	text-indent: 0px;
+	font-family: "verdana";
+	font-size: 11px;
+	font-weight: bold;
+}
+
+.checkbox input {
+  position: absolute;
+  top:3px;
+  left:0px;
+  opacity: 0.7;  
+  cursor: pointer;
+  height: 20px;
+  width: 20px; 
+}
+
+.slider {
+	position:absolute;	
+}
+
+.tituloSlider{
+	position: absolute;
+	font-family: "verdana";
+	font-size: 11px;
+	font-weight: bold;
+	letter-spacing: 1.2px;
+	color: #2c3e50;
+	
+}

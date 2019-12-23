@@ -1,0 +1,215 @@
+@import url('https://fonts.googleapis.com/css?family=Dosis|Karla');
+*{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body{
+  font-family: Verdana, sans-serif;
+  margin:0;
+  background-color: #f2f2f2;
+  }
+/*---------------------------*/
+/* cabeçalho principal */
+header{
+  background: #37abd0;
+  padding-top: 1px;
+}
+header h1 img{
+  margin-left: 4.5em;
+  float: left;
+  margin-right: 0.4em;  
+}
+header h1{
+  margin-top: 0.5em;
+  font-size: 1.7em;
+  font-family: 'Karla', sans-serif;
+  color: white;
+}
+header h2{
+  font-size: 0.8em;
+  font-family: 'Dosis', sans-serif;
+  color: white;
+  letter-spacing: 4px;
+  margin-left: 13.7em;
+  display: block;
+  font-weight: normal;
+}
+/* cabeçalho navegação */
+
+header nav ol{
+  margin-top: 1em;
+  clear: both;
+  padding: 8px;
+  background-color: #70cfed;
+  list-style-type: circle;
+  text-align: left;
+}
+header nav li{
+  display: inline;
+}
+header nav li:first-child{margin-left: 7.1em;}
+nav a{
+  text-decoration: none;
+  padding: 8px 12px;
+  font-size: 1.15em;
+  color: white;
+  font-family: 'Karla', sans-serif;
+  font-weight: 700;
+}
+nav a:hover{
+  background-color: #37abd0;
+}
+/* área dos slides */
+section{
+  width: 720px;
+  margin: 3.5em auto 0;
+  background-image: url('../images/papel.png');
+  background-repeat: no-repeat;
+  background-position-x: top;
+  background-position-y: left;
+}
+.mySlides {
+   height: 360px;
+   width: 640px;
+   margin: 0 auto; 
+}
+/* número do slide */
+.numbertext {
+    color: #857d7d;
+    font-size: 12px;
+    padding: 8px 12px;
+    float: right;
+}
+/* paginação */
+div.paginacao, div.paginacao ol{
+  display: flex;
+  justify-content: space-between;
+}
+div.paginacao ol{
+  list-style-type: none;
+}
+div.paginacao{
+  margin: 0 2em;
+}
+.dot {
+    cursor: pointer;
+    height: 15px;
+    width: 15px;
+    margin: 17px 2px;
+    background-color: #7aa8b7;
+    border-radius: 45%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+}
+.active, .dot:hover {
+    background-color: #2a647c;
+}
+/* setas */
+button{
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 22px;
+  user-select: none;
+}
+.prev:active, .next:active{
+  transform: translateY(3px);
+}
+/* seta para esquerda */
+button.prev{
+  background-image: url('../images/seta_esq.png');
+  background-repeat: no-repeat;
+}
+/* seta para direita */
+button.next {
+  background-image: url('../images/seta_dir.png');
+  background-repeat: no-repeat;
+}
+/* ------------------------------------ */
+section h1{
+  font-size: 2em;
+  padding-top: 4.5em;
+  text-align: center;
+}
+section h2{
+  text-align: center;
+  font-weight: 800;
+  font-size: 1.5em;
+}
+section h3{
+  padding-top: 0.3em; 
+  font-weight: 700;
+  font-size: 1em;
+  margin-left: 10px;
+  margin-top: 14px;
+}
+p{
+  margin: 6px 10px;
+}
+section li{
+  display: inline;
+}
+section ul{
+  text-align: center;
+}
+td, th{
+  border: 1px solid #000000;
+  padding: 1em;
+  text-align: center;
+  font-weight: 600;
+}
+table{
+  margin: 1em auto;
+  border-collapse: collapse;
+}
+.img_rigth{
+  display: block;
+  box-shadow: 1px 1px 3px 1px #0000001f;
+}
+.img_center{
+  display: block;
+  margin: 1em auto 0;
+  padding: 0.2em;
+  box-shadow: 1px 1px 3px 1px #0000001f;
+}
+#primeiro_quadro{
+  margin-top: 2em;
+}
+.quadro1{
+  padding: 0.7em;
+  background-color: #2D5C80;
+  border-radius: 20px 7px 20px 7px;
+  color: white;  
+}
+.quadro2{
+  padding: 0.7em;
+  background-color: #35ACE6;
+  border-radius: 10px 10px 10px 10px;
+  color: black;  
+}
+.quadro3{
+  padding: 0.7em;
+  background-color: #2D7B80;
+  border-radius:  10px 1px 20px 1px;
+  color: white;  
+}
+.quadro4{
+  padding: 0.5em;
+  border: 2px solid #2D5C80;
+  border-radius: 15px 10px 15px 10px;
+  color: black;  
+}
+.quadro5{
+  padding: 0.7em;
+  background-color: #10BF40;
+  border-radius: 15px 10px 15px 10px;
+  color: white;  
+}
+canvas#myCanvas{
+  margin-left: 40px;
+}
+/* diminuir o tamanho do texto em telas menores */
+@media only screen and (max-width: 300px) {
+    .prev, .next,.text {font-size: 11px}}

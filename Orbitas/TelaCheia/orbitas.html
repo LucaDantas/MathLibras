@@ -1,0 +1,123 @@
+<!DOCTYPE HTML>
+<html>
+<link rel="stylesheet" type="text/css" href="mainbuttons.css">
+<link rel="stylesheet" href="classes.css">
+<body onkeydown="whichButton(event)" id="principal" onload="desenhar()" ontouchstart="touchCell(event)" ontouchmove="touchCell(event)" style="height: 360px; width: 1000px;">
+    <canvas id="myCanvas" width="3000" height="700" onmousemove="listener(event)" onmousedown="clicked()" onmouseup="noclicked()"></canvas>
+    <!-- <script src="PSlibrary.js"></script> -->
+    <!-- <script src="BibliotecaGeraldo/PSlibrary.js"></script> -->
+    <script src="http://www.fisicainvertida.com/PSlibrary/PSlibrary.js"></script>
+    <script>
+        var canvas = document.getElementById('myCanvas');
+        var ctx = canvas.getContext('2d');
+        //------------------------------------------------------------->
+        
+        var PxC = 350;          //Ponto X do centro do sistema 1
+        var PyC = 310;          //Ponto Y do centro do sistema 1
+        var PxC2 = PxC + 700;     //Ponto X do centro do sistema 2
+        var PyC2 = PyC + 50;         //Ponto Y do centro do sistema 2
+        var OrbTerra = 135;     //Raio da orbita da terra
+        var OrbMarte = OrbTerra * 1.5;  //Raio da orbita de marte
+        var rSol = 30;          //Raio do sol
+        var rTerra = 8;        //Raio do sol - O raio está fora de escala em relação ao sol pois seria mais que 100 vezes menor
+        var rMarte = rTerra/2;  //Raio do sol - O raio está fora de escala em relação ao sol pois seria mais que 100 vezes menor
+        var wTerra = 0.02;         //Velocidade angular da terra
+        var wMarte = wTerra*0.5316;     //Velocidade angular de marte    
+        var PxT = PxC + OrbTerra;       //Posição inicial em X da terra       
+        var PyT = PyC;                  //Posição inicial em Y da terra
+        var PxM = PxC + OrbMarte;       //Posição inicial em X de marte no primeiro sistema
+        var PyM = PyC;                  //Posição inicial em Y de marte no primeiro sistema
+        var PxS = PxC2 + OrbTerra;       //Posição inicial em X do Sol no segundo sistema
+        var PyS = PyC2;                  //Posição inicial em Y do Sol no segundo sistema
+        var PxM2 = PxS + OrbMarte;       //Posição inicial em X de marte no primeiro sistema
+        var PyM2 = PyS;                  //Posição inicial em Y de marte no primeiro sistema
+        var t1 = 0;                      //Contador do tempo para definir as posições de Marte e da Terra do sistema 1
+        var t2 = 0;                      //Contador do tempo para definir as posições de Marte e da Terra do sistema 2
+        var pXMarte = [];
+        var pYMarte = [];
+        
+        function defPos1(phiT,phiM){
+            PxT = OrbTerra*Math.cos(t1*wTerra + phiT)+PxC;
+            PyT = OrbTerra*Math.sin(t1*wTerra + phiT)+PyC;
+            PxM = OrbMarte*Math.cos(t1*wMarte + phiM)+PxC;
+            PyM = OrbMarte*Math.sin(t1*wMarte + phiM)+PyC;
+        }
+        
+        function defPos2(phiT,phiM){
+            PxS = OrbTerra*Math.cos(t2*wTerra + phiT)+PxC2;
+            PyS = OrbTerra*Math.sin(t2*wTerra + phiT)+PyC2;
+            PxM2 = OrbMarte*Math.cos(t2*wMarte + phiM)+PxS;
+            PyM2 = OrbMarte*Math.sin(t2*wMarte + phiM)+PyS;
+        }
+        
+        function ActvS1(){
+            setInterval(S1,-20);
+        }
+        
+        function ActvS2(){
+            setInterval(S2,20);
+        }
+        
+        function S1(){
+            ctx.clearRect(0, 0, canvas.width, canvas.height);       //Limpa a tela
+            circle(PxC, PyC, OrbTerra, 2, nocolor, 'lightgrey');
+            circle(PxC, PyC, OrbMarte, 2, nocolor, 'lightgrey');
+            circle(PxC, PyC, rSol, 0, 'orange', 'orange');
+            circle(PxT, PyT, rTerra, 0, 'blue', 'blue');
+            circle(PxM, PyM, rMarte, 0, 'brown', 'brown');
+            t1++;
+            defPos1(0,0);
+        }
+        
+        function S2(){
+            ctx.clearRect(0, 0, canvas.width, canvas.height);       //Limpa a tela
+            circle(PxC2, PyC2, OrbTerra, 2, nocolor, 'lightgrey');
+            circle(PxS, PyS, OrbMarte, 2, nocolor, 'lightgrey');
+            circle(PxC2, PyC2, rTerra, 0, 'blue', 'blue');
+            circle(PxS, PyS, rSol, 0, 'orange', 'orange');
+            circle(PxM2, PyM2, rMarte, 0, 'brown', 'brown');
+            t2++;
+            defPos2(0,0);
+        }
+    </script>
+    <button class="confirmar" onclick="ActvS1()" style="position: absolute; top: 600px; left: 20px;">Sistema 1</button>
+    <button class="confirmar" onclick="ActvS2()" style="position: absolute; top: 600px; left: 220px;">Sistema 2</button>
+</body>
+</html>
+
+
+
+
+
+
+
+
+<!-- O que não vou usar mas pra deixar salvo -->
+<!-- // if(tMarte){
+    //     for(var i = 0; i < cont; i++){
+        //         circle(pXMarte[i], pYMarte[i], 3, 1, 'lightgrey', 'lightgrey');
+        //     }
+        // }
+        // if(t%ritmo == 0 && cont < 150){
+            //     cont++;
+            //     pXMarte[t/ritmo] = PxM2;
+            //     pYMarte[t/ritmo] = PyM2;
+            // } -->
+            
+            <!-- // line(PxT, PyT, PxC, PyC, 1, 'red');
+                // line(PxT, PyT, PxM, PyM, 1, 'red');
+                // line(PxM, PyM, PxC, PyC, 1, 'red'); -->
+                
+                <!-- 
+                    function Orbitas(){
+                        if(orb) orb = false;
+                        else orb = true;
+                    }
+                    
+                    function Marte(){
+                        if(tMarte) tMarte = false;
+                        else tMarte = true;
+                    }
+                -->
+                <!--  <button class="confirmar" onclick="Orbitas()" style="position: absolute; top: 600px; left: 20px;">Órbitas</button>
+                    <button class="confirmar" onclick="Marte()" style="position: absolute; top: 600px; left: 220px;">Trajetória de Marte</button> -->
