@@ -7,27 +7,27 @@
     <div class="fundo">
         <canvas id="myCanvas" width="640" height="360"></canvas>
         <script src="http://www.fisicainvertida.com/PSlibrary/PSlibrary.js"></script>
-        <script src="../Biblioteca de geraldo/PSLibrary.js"></script>
         <script>
             var canvas = document.getElementById('myCanvas');
             var ctx = canvas.getContext('2d');
             //---------------------------------------------------
-            var px = 235;       //Centro em x do sistema de coordenadas
-            var py = 165;       //Centro em y do sistema de coordenadas
-            var Lx = 280;       //Largura do sistema em x(de uma ponta a outra)
-            var Ly = Lx;        //Largura do sistema em y(de uma ponta a outra)
-            var alpha = 0.75;      //Transparência do sistema de coordenadas
-            var angulo = -32;    //Angulo da linha Z em relação ao eixo (x) - O valor inidicado é 32 graus mas o resultado é 30 graus
+            var px = 235;                                   //Centro em x do sistema de coordenadas
+            var py = 165;                                   //Centro em y do sistema de coordenadas
+            var Lx = 260;                                   //Largura do sistema em x(de uma ponta a outra)
+            var Ly = Lx;                                    //Largura do sistema em y(de uma ponta a outra)
+            var alpha = 0.75;                               //Transparência do sistema de coordenadas
+            var angulo = -32;                               //Angulo da linha Z em relação ao eixo (x) - O valor inidicado é 32 graus mas o resultado é 30 graus
             var angulo_rad = Math.abs(angulo*3.14/180);     //Angulo convertido em radiano para o calculo do valor de x e y com base na variação em z
-            var angulo_cont = -180 + angulo;        //Angulo da segunda linha (cintrario ao angulo da primeira) do eixo z
-            var tam_reta = Lx/2;        //Tamanho da reta do eixo z
+            var angulo_cont = -180 + angulo;                //Angulo da segunda linha (cintrario ao angulo da primeira) do eixo z
+            var tam_reta = Lx/2;                            //Tamanho da reta do eixo z
+            var tam_planos = tam_reta - 10;
             var PxC = px;       //Posição inicial do circulo X
             var PyC = py;       //Posição inicial do circulo Y
-            var z = 0;      //Valor inicial de Z
-            var x = 0;      //Valor inicial de X
-            var y = 0;      //Valor inicial de Y
-            var xz = 0;     //Valor da variação em x com base no movimento em X
-            var yz = 0;     //Valor da variação em x com base no movimento em Y
+            var z = 0;          //Valor inicial de Z
+            var x = 0;          //Valor inicial de X
+            var y = 0;          //Valor inicial de Y
+            var xz = 0;         //Valor da variação em x com base no movimento em X
+            var yz = 0;         //Valor da variação em x com base no movimento em Y
             var tam_b;
             var cor_linha = '#00d2d3';
             var cor_linha2 = 'rgba(44, 62, 80, 0.75)';
@@ -38,15 +38,11 @@
             var cor_quadradodireita = 'rgba(0, 206, 201, 0.5)';
             var cor_quadradocima = 'rgba(225, 112, 85, 0.25)';
             var cor_quadradobaixo = 'rgba(225, 112, 85, 0.5)';
+            var cor_planoX = 'rgba(225, 112, 85, 0.2)';
             var CheckBox01;
             var CheckBox02;
             var CheckBox03;
-            var CheckBox04;
             var i;
-            // var fundoxy = false;
-            // var fundoyz = false;
-            // var fundoxz = false;
-            // var malha = false;
             
             function desenhar(){
                 ctx.clearRect(0, 0, canvas.width, canvas.height);       //Limpa a tela
@@ -60,36 +56,48 @@
                 checkBox02 = document.getElementById("_fundoyz");
                 checkBox03 = document.getElementById("_fundoxz");
                 //QUADRICULADO DO EIXO X
-                for (var i = -3; i <= 3; i++) {
-                    lineAngle(px + (Lx/7)*i, py, tam_reta, angulo, 0.5, cor_linha3);      //Quadriculado no eixo X Vertical (Z<0)
-                    lineAngle(px + (Lx/7)*i, py, tam_reta, angulo_cont, 0.5, cor_linha3);      //Quadriculado no eixo X Vertical (Z>0)
-                    lineAngle(px - (Lx/2) - (Lx/7)*i*(Math.cos(angulo_rad)), py + (Lx/7)*i*(Math.sin(angulo_rad)), 2*tam_reta, 0, 0.5, cor_linha3);      //Quadriculado no eixo X Horizontal(X<0)
-                }
+                // for (let i = -3; i <= 3; i++) {
+                //     lineAngle(px + (Lx/7)*i, py, tam_reta, angulo, 0.5, cor_linha3);      //Quadriculado no eixo X Vertical (Z<0)
+                //     lineAngle(px + (Lx/7)*i, py, tam_reta, angulo_cont, 0.5, cor_linha3);      //Quadriculado no eixo X Vertical (Z>0)
+                //     lineAngle(px - (Lx/2) - (Lx/7)*i*(Math.cos(angulo_rad)), py + (Lx/7)*i*(Math.sin(angulo_rad)), 2*tam_reta, 0, 0.5, cor_linha3);      //Quadriculado no eixo X Horizontal(X<0)
+                // }
                 // TRANSORMA O VALOR DE Z NOS EIXOS X E Y
                 xz = Math.cos(angulo_rad)*z;
                 yz = Math.sin(angulo_rad)*z;
                 //DEFININDO O TAMANHO DA BOLINHA DE ACORDO COM O Z
                 tam_b = 6 - z/110 + x/160;          
                 //
-                lineAngle(px, py, tam_reta, angulo, 1.5, cor_linha2);      //Desenha a linha do eixo Z no quadrante superior
-                vector1(px, py, tam_reta, angulo_cont, 1.5, cor_linha2);        //Desenha a linha do eixo Z no quadrante inferior
+                lineAngle(px, py, tam_reta, angulo, 1.5, cor_linha2);                       //Desenha a linha do eixo Z no quadrante superior
+                vector1(px, py, tam_reta, angulo_cont, 1.5, cor_linha2);                    //Desenha a linha do eixo Z no quadrante inferior
                 coordinateSistem(px, py, Lx, Ly, alpha, false, false, false, false);        //Desenha o sistema de coordenadas X e Y
-                line(PxC + xz, PyC - yz, PxC + xz + x, PyC - yz, 1, cor_linha);      //Linha entre o ponto no eixo Z com a bolinha com Y = 0
-                line(PxC + x, PyC, PxC + xz + x, PyC - yz, 1, cor_linha);     //Linha entre o ponto no eixo X e a bolinha com Y = 0
-                line(PxC + xz + x, PyC - yz, PxC + xz + x, PyC - yz - y, 1, cor_linha);       //Linha entre o ponto da bolinha com Y = 0 e sua posição com Y <> 0
-                line(PxC + x, PyC - y, PxC + xz + x, PyC - yz - y, 1, cor_linha);       //Linha entre o ponto no eixo X e a bolinha com Y <> 0 em ambos
-                line(PxC + x, PyC, PxC + x, PyC - y, 1, cor_linha);       //Linha entre o ponto da bolinha com Y = 0 e sua posição com Y <> 0 com Z = 0
-                line(PxC + xz, PyC - yz - y, PxC + xz + x, PyC - yz - y, 1, cor_linha);      //Linha entre o ponto no eixo Z com a bolinha com Y <> 0
-                line(PxC + xz, PyC - yz, PxC + xz, PyC - yz - y, 1, cor_linha);       //Linha entre o ponto da bolinha com Y = 0 e sua posição com Y <> 0 e com X = 0
-                line(PxC, PyC - y, PxC + xz, PyC - y - yz, 1, cor_linha);      //Linha entre o ponto com Z e X = 0 e Y <> 0 e o ponto com X = 0 e Z e Y <> 0
-                line(PxC, PyC - y, PxC + x, PyC - y, 1, cor_linha);      //Linha entre o ponto com Z e X = 0 e Y <> 0 e o ponto com Z = 0 e X e Y <> 0
-                line(PxC, PyC, PxC + xz, PyC - yz, 1, cor_linha);      //Linha entre o ponto com Z e X = 0 e Y <> 0 e o ponto com X = 0 e Z e Y = 0
-                line(PxC, PyC, PxC + x, PyC, 1, cor_linha);      //Linha entre o ponto com Z e X = 0 e Y <> 0 e o ponto com Z = 0 e X e Y = 0
-                line(PxC, PyC, PxC, PyC - y, 1, cor_linha);     //Linha entre o ponto com X Y Z = 0 ate o ponto com X e Z = 0 e Z <> 0
-                //PREENCHIMENTO DOS RETÂNGULOS
-                //FUNDO XY
+                line(PxC + xz, PyC - yz, PxC + xz + x, PyC - yz, 1, cor_linha);             //Linha entre o ponto no eixo Z com a bolinha com Y = 0
+                line(PxC + x, PyC, PxC + xz + x, PyC - yz, 1, cor_linha);                   //Linha entre o ponto no eixo X e a bolinha com Y = 0
+                line(PxC + xz + x, PyC - yz, PxC + xz + x, PyC - yz - y, 1, cor_linha);     //Linha entre o ponto da bolinha com Y = 0 e sua posição com Y <> 0
+                line(PxC + x, PyC - y, PxC + xz + x, PyC - yz - y, 1, cor_linha);           //Linha entre o ponto no eixo X e a bolinha com Y <> 0 em ambos
+                line(PxC + x, PyC, PxC + x, PyC - y, 1, cor_linha);                         //Linha entre o ponto da bolinha com Y = 0 e sua posição com Y <> 0 com Z = 0
+                line(PxC + xz, PyC - yz - y, PxC + xz + x, PyC - yz - y, 1, cor_linha);     //Linha entre o ponto no eixo Z com a bolinha com Y <> 0
+                line(PxC + xz, PyC - yz, PxC + xz, PyC - yz - y, 1, cor_linha);             //Linha entre o ponto da bolinha com Y = 0 e sua posição com Y <> 0 e com X = 0
+                line(PxC, PyC - y, PxC + xz, PyC - y - yz, 1, cor_linha);                   //Linha entre o ponto com Z e X = 0 e Y <> 0 e o ponto com X = 0 e Z e Y <> 0
+                line(PxC, PyC - y, PxC + x, PyC - y, 1, cor_linha);                         //Linha entre o ponto com Z e X = 0 e Y <> 0 e o ponto com Z = 0 e X e Y <> 0
+                line(PxC, PyC, PxC + xz, PyC - yz, 1, cor_linha);                           //Linha entre o ponto com Z e X = 0 e Y <> 0 e o ponto com X = 0 e Z e Y = 0
+                line(PxC, PyC, PxC + x, PyC, 1, cor_linha);                                 //Linha entre o ponto com Z e X = 0 e Y <> 0 e o ponto com Z = 0 e X e Y = 0
+                line(PxC, PyC, PxC, PyC - y, 1, cor_linha);                                 //Linha entre o ponto com X Y Z = 0 ate o ponto com X e Z = 0 e Z <> 0
+                
+                //PREENCHIMENTO DOS PLANOS
+
+                //PLANO XY
                 if(checkBox01.checked == true == true){
-                    quadrangle(px + tam_reta, py + tam_reta,px - tam_reta, py + tam_reta, px - tam_reta, py - tam_reta, px + tam_reta, py- tam_reta, 180, 1, darkcolor, darkcolor);
+                    quadrangle(px + tam_planos, py + tam_planos,px - tam_planos, py + tam_planos, px - tam_planos, py - tam_planos, px + tam_planos, py- tam_planos, 180, 1, cor_planoX, nocolor);
+                }
+
+                //PLANO XY
+                if(checkBox02.checked == true == true){
+                    quadrangle(px + tam_planos*(Math.cos(angulo_rad)), py - tam_planos - tam_planos*Math.sin(angulo_rad),  px + tam_planos*(Math.cos(angulo_rad)) , py + tam_planos - tam_planos*Math.sin(angulo_rad), px - tam_planos*(Math.cos(angulo_rad)), py + tam_planos + tam_planos*Math.sin(angulo_rad), px - tam_planos*(Math.cos(angulo_rad)), py - tam_planos + tam_planos*Math.sin(angulo_rad), 180, 1, cor_planoX, nocolor);
+                }
+
+                //PLANO XZ
+                if(checkBox03.checked == true == true){
+                    quadrangle(px + tam_planos + tam_planos*Math.cos(angulo_rad) , py - tam_planos*Math.sin(angulo_rad) ,px + tam_planos - tam_planos*Math.cos(angulo_rad) , py + tam_planos*Math.sin(angulo_rad) , px - tam_planos - tam_planos*Math.cos(angulo_rad) , py + tam_planos*Math.sin(angulo_rad) , px - tam_planos + tam_planos*Math.cos(angulo_rad) , py - tam_planos*Math.sin(angulo_rad) , 180, 1, cor_planoX, nocolor);
                 }
 
                 //INDICADORES DOS EIXOS X,Y,Z
@@ -112,19 +120,15 @@
         <input class="slider" type="range" id="eixoZ" min="-120" max="120" value="0" style="left:500px; top:240px; width:100px" > 
 
         <!-- Checkbox -->
-        <label class="container" style="position: absolute; top: 330px; left: 30px;">Malha
-            <input type="checkbox" id="malha" checked>
-            <span class="checkmark"></span>
-        </label> 
-        <label class="container" style="position: absolute; top: 330px; left: 170px;">Plano XY
+        <label class="container" style="position: absolute; top: 330px; left: 50px;">Plano XY
             <input type="checkbox" id="_fundoxy">
             <span class="checkmark"></span>
         </label> 
-        <label class="container" style="position: absolute; top: 330px; left: 340px;">Plano YZ
+        <label class="container" style="position: absolute; top: 330px; left: 220px;">Plano YZ
             <input type="checkbox" id="_fundoyz">
             <span class="checkmark"></span>
         </label> 
-        <label class="container" style="position: absolute; top: 330px; left: 503px;">Plano XZ
+        <label class="container" style="position: absolute; top: 330px; left: 390px;">Plano XZ
             <input type="checkbox" id="_fundoxz">
             <span class="checkmark"></span>
         </label> 
