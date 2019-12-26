@@ -106,18 +106,22 @@
                 textbold("Z", 10,"Arial",px - tam_reta + 10,py + tam_reta/2 + 20,darkcolor);
                 //
                 circle(PxC + xz + x, PyC - yz - y, tam_b, 1, '#0abde3', '#0abde3');      //Desenha o círculo do personagem
+
+                //INDICADOR DE POSIÇÃO NO FORMATO (X,Y,Z)
+                textbold( "Posição no formato (X, Y, Z)", 12, "Roboto", 440, 65,darkcolor);
+                textbold( "(" + x + ", " + y + ", " + -z + ")", 14, "New Times Roman", 500, 90,darkcolor);
             }    
             setInterval(desenhar,10);       //indica o tempo de repetição da função desenhar
         </script>
         <!-- Botões usados para alterar os valores de X Y e Z -->
-        <label class="tituloSlider" style="top:100px; left:500px">Eixo X</label>
-        <input class="slider" type="range" id="eixoX" min="-120" max="120" value="0" style="left:500px; top:120px; width:100px" >
+        <label class="tituloSlider" style="top:120px; left:500px">Eixo X</label>
+        <input class="slider" type="range" id="eixoX" min="-120" max="120" value="0" style="left:500px; top:140px; width:100px" >
     
-        <label class="tituloSlider" style="top:160px; left:500px">Eixo Y</label>
-        <input class="slider" type="range" id="eixoY" min="-120" max="120" value="0" style="left:500px; top:180px; width:100px" > 
+        <label class="tituloSlider" style="top:180px; left:500px">Eixo Y</label>
+        <input class="slider" type="range" id="eixoY" min="-120" max="120" value="0" style="left:500px; top:200px; width:100px" > 
         
-        <label class="tituloSlider" style="top:220px; left:500px">Eixo Z</label>
-        <input class="slider" type="range" id="eixoZ" min="-120" max="120" value="0" style="left:500px; top:240px; width:100px" > 
+        <label class="tituloSlider" style="top:240px; left:500px">Eixo Z</label>
+        <input class="slider" type="range" id="eixoZ" min="-120" max="120" value="0" style="left:500px; top:260px; width:100px" > 
 
         <!-- Checkbox -->
         <label class="container" style="position: absolute; top: 330px; left: 50px;">Plano XY
