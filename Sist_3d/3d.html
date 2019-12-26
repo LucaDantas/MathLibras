@@ -28,17 +28,19 @@
             var y = 0;          //Valor inicial de Y
             var xz = 0;         //Valor da variação em x com base no movimento em X
             var yz = 0;         //Valor da variação em x com base no movimento em Y
-            var tam_b;
-            var cor_linha = '#00d2d3';
-            var cor_linha2 = 'rgba(44, 62, 80, 0.75)';
-            var cor_linha3 = 'rgba(44, 62, 80, 0.5)';
-            var cor_quadradofrente = 'rgba(68, 12, 232, 0.25)';
-            var cor_quadradotras = 'rgba(68, 12, 232, 0.5)';
-            var cor_quadradoesquerda = 'rgba(0, 206, 201, 0.25)';
-            var cor_quadradodireita = 'rgba(0, 206, 201, 0.5)';
-            var cor_quadradocima = 'rgba(225, 112, 85, 0.25)';
-            var cor_quadradobaixo = 'rgba(225, 112, 85, 0.5)';
+            var tam_b;          //Tamanho da bola (Varia de acordo com a posição)
+
+            //VARIÁVEIS DE CORES - MUDAR AQUI!!!!!
+
+            var cor_linha = '#00d2d3';                      //COR DAS LINHAS ENTRE A BOLA E O CENTRO DO SISTEMA DE COORDENADAS
+            var cor_linha2 = 'rgba(44, 62, 80, 0.75)';      //COR DA LINHA DO SISTEMA DE COORDENADAS NO EIXO Z
+            // var cor_linha3 = 'rgba(44, 62, 80, 0.5)';    //ERA A COR DA MALHA MAS NÃO TEM MAIS
             var cor_planoX = 'rgba(225, 112, 85, 0.2)';
+            var cor_planoY = 'rgba(225, 112, 85, 0.2)';
+            var cor_planoZ = 'rgba(225, 112, 85, 0.2)';
+
+            //FIM DAS CORES
+
             var CheckBox01;
             var CheckBox02;
             var CheckBox03;
@@ -109,7 +111,7 @@
 
                 //INDICADOR DE POSIÇÃO NO FORMATO (X,Y,Z)
                 textbold( "Posição no formato (X, Y, Z)", 12, "Roboto", 440, 65,darkcolor);
-                textbold( "(" + x + ", " + y + ", " + -z + ")", 14, "New Times Roman", 500, 90,darkcolor);
+                textbold( "(" + x + ", " + y + ", " + -z + ")", 14, "New Times Roman", 492, 90,darkcolor);
             }    
             setInterval(desenhar,10);       //indica o tempo de repetição da função desenhar
         </script>
