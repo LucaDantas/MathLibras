@@ -1,0 +1,108 @@
+﻿﻿
+<!DOCTYPE HTML>
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="../styles/botoes_jogo.css">
+<script src="Functions_niv1.js"></script>
+<body onkeydown="whichButton(event)">
+    <div style="background-image: url('mapa.jpg'); background-repeat: no-repeat; margin: 100px; background-size: cover;">
+        <canvas id="myCanvas" width="570" height="540"></canvas>
+        <script src="http://www.fisicainvertida.com/PSlibrary/PSlibrary.js"></script>
+        <script src="javascriptBtn.js"></script>
+        <link rel="stylesheet" href="configplan.css">
+        <!-- <div class="instrucao" id="instrucoes">O objetivo do jogo é encontrar e alcançar com o personagem os pontos determinados no topo da tela.<br>
+            Para mover o personagem utilizam-se as teclas <b>A S D W</b> ou as setas direcionais do teclado.<br>
+            Para confirmar a sua posição utiliza-se a tecla <b>Q</b> ou a tecla <b>ENTER</b>.<br>
+            É pressionar apertar a tecla <b>R</b> para recomeçar a partida.<br>
+        </div>
+        <button class="btn btn-round" id="botao" onclick="iniciar()">Iniciar!</button> -->
+        <script>
+            var canvas = document.getElementById('myCanvas');
+            var ctx = canvas.getContext('2d');
+            //window.onload = init;
+            //
+            var px = 300;       //Centro do sistema X
+            var py = 280;       //Centro do sistema Y
+            var Lx = 480;       //Largura do Sistema X
+            var Ly = 480;       //Largura do Sistema Y
+            var PxC = px;       //Ponto inicial do personagem X
+            var PyC = py;       //Ponto inicial do personagem Y
+            var t = 3;      //Tamanho do nariz
+            var Rp = 10;       //Raio do círculo do personagem
+            var dir;       //Lógica para definir o lugar do nariz
+            var esq;       //Lógica para definir o lugar do nariz
+            var cima;      //Lógica para definir o lugar do nariz
+            var baixo;     //Lógica para definir o lugar do nariz
+            var msg_band = '';     //Mensagem mostrada ao tentar colocar a bandeira
+            var PxB;       //Ponto X da Bandeira
+            var PyB;       //Ponto Y da Bandeira
+            var num;       //Número sorteado aleatorio
+            var massa2;        //Auxiliar utilizada na conversão dos números aleatórios
+            var massa3;        //Auxiliar utilizada na conversão dos números aleatórios
+            var mudou = false;             //Lógica para determinar se o nível mudou
+            var i;
+            var acabou = false;
+            var button = document.querySelector('button#botao');
+            var div = document.querySelector('div#instrucoes');
+            var cor_boneco = redcolor;
+            
+            // function iniciar(){
+            //     setInterval(desenhar, 10);
+            //     button.remove();
+            //     div.remove();
+            //     mudar_nivel();
+            // }
+
+            setInterval(desenhar, 10);
+            mudar_nivel();
+
+            function desenhar() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);   //Limpa a tela
+                //rectangle(0, 0, canvas.width, canvas.height, 1, nocolor, darkcolor);       //Quadrado ao redor da tela
+                //There's no need for that anymore since it'll be a map not a xy plane
+                // for (i = 0; i <= 24; i++) {        //Eixo numerado X
+                //     if (i < 3) {
+                //         textbold(i - 12, '8', 'verdana', px - (Lx / 2) + i * 20 - 13, py + (Ly / 2) + 15, darkcolor);
+                //     } else if (i > 21) {
+                //         textbold(i - 12, '8', 'verdana', px - (Lx / 2) + i * 20 - 8, py + (Ly / 2) + 15, darkcolor);
+                //     } else if (i < 12) {
+                //         textbold(i - 12, '8', 'verdana', px - (Lx / 2) + i * 20 - 10, py + (Ly / 2) + 15, darkcolor);
+                //     } else if (i == 12) {
+                //         textbold(i - 12, '8', 'verdana', px - (Lx / 2) + i * 20 - 5, py + (Ly / 2) + 15, darkcolor);
+                //     } else if (i > 12) {
+                //         textbold(i - 12, '8', 'verdana', px - (Lx / 2) + i * 20 - 4, py + (Ly / 2) + 15, darkcolor);
+                //     }
+                // }
+                // for (i = 0; i <= 24; i++) {        //Eixo numerado Y
+                //     textbold((i - 12)*(-1), '8', 'verdana', px + (Lx / 2) + 8, py - (Ly / 2) + i * 20 + 4, darkcolor);
+                // }
+                //coordinateSistem(px, py, Lx, Ly, true, false, false, false, false);     //Sistema de coordenadas
+                circle(PxC, PyC, Rp, 0, cor_boneco, cor_boneco);      //Círculo do carinha
+                textbold(msg_band, '10', 'verdana', px - 138, py - (Ly/2) - 10, 'black');      //Mensagem de Fim ou ponto incorreto
+                // if (mudou == false) {
+                //     mudar_nivel();
+                //     mudou = true;
+                // }
+                textbold('Ponto X: ' + ((PxB - px) / 20), '10', 'verdana', px - 90, py - (Ly / 2) - 28, 'black');       //Coordenada da fase X
+                textbold('Ponto Y: ' + (-(PyB - py) / 20), '10', 'verdana', px + 10, py - (Ly / 2) - 28, 'black');      //Coordenada da fase Y
+                if (cima == true) {
+                    triangle(PxC + t, PyC - 10, PxC, PyC - 10 - 5, PxC - t, PyC - 10, 2, cor_boneco, cor_boneco);     //Nariz (Cima)
+                }
+                if (baixo == true) {
+                    triangle(PxC + t, PyC + 10, PxC, PyC + 10 + 5, PxC - t, PyC + 10, 2, cor_boneco, cor_boneco);     //Nariz (Baixo)
+                }
+                if (dir == true) {
+                    triangle(PxC + 10, PyC + t, PxC + 10 + 5, PyC, PxC + 10, PyC - t, 2, cor_boneco, cor_boneco);     //Nariz (Direita)
+                }
+                if (esq == true) {
+                    triangle(PxC - 10, PyC - t, PxC - 10 - 5, PyC, PxC - 10, PyC + t, 2, cor_boneco, cor_boneco);     //Nariz (Esquerda)
+                }
+            }
+            canvas.onmousedown = cliquemouse;
+            
+            // ------------------------------------------------------------------------------------------
+        </script>
+    </div>
+    
+</body>
+</html> 
