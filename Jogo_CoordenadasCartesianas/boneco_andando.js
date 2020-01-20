@@ -26,7 +26,8 @@ function corpoParado(px, py, lenght, colorhead, colorarms, colorskin, deg){
 	ctx.translate(-px, -py);
 	ctx.restore();
 }
-
+var side = false;
+var chg = false;
 //THE ONLY DIFFERENCE BETWEEN THIS ONE AND THE ONE STANDING STILL IS THAT THIS ONE WILL HAVE FEET THAT MOVE IN DIFFERENT POSITIONS BASED TO PASS THE IDEA THAT IT'S MOVING
 function andando(px, py, lenght, colorhead, colorarms, colorskin, colorfeet, position, deg){
 	ctx.save();
@@ -36,9 +37,27 @@ function andando(px, py, lenght, colorhead, colorarms, colorskin, colorfeet, pos
 	//
 
 	//FEET
-	rectangleRound(lenght/6, position + lenght/8.5, lenght/7, lenght/4.5, lenght/10, 0, nocolor, colorfeet);
-	rectangleRound(-lenght/3.2, -position + lenght/8.5, lenght/7, lenght/4.5, lenght/10, 0, nocolor, colorfeet);
-
+	if(position%( Math.floor( 2*(lenght) /7 ) +2) > lenght/7){
+		if(!chg){
+			side = !side;
+			chg = true;
+		}
+		if(!side){
+			rectangleRound(lenght/6, position%( Math.floor(lenght/7) +1) + lenght/8.5 - lenght/7, lenght/7, lenght/4.5, lenght/10, 0, nocolor, colorfeet);
+			rectangleRound(-lenght/3.2, -position%( Math.floor(lenght/7) +1) + lenght/8.5 + lenght/7, lenght/7, lenght/4.5, lenght/10, 0, nocolor, colorfeet);
+		}
+		else{
+			rectangleRound(lenght/6, -position%( Math.floor(lenght/7) +1) + lenght/8.5 + lenght/7, lenght/7, lenght/4.5, lenght/10, 0, nocolor, colorfeet);
+			rectangleRound(-lenght/3.2, position%( Math.floor(lenght/7) +1) + lenght/8.5 - lenght/7, lenght/7, lenght/4.5, lenght/10, 0, nocolor, colorfeet);
+		}
+	}
+	else{
+		if(side) position = -position;
+		chg = false;
+		rectangleRound(lenght/6, position%( Math.floor(lenght/7) +1) + lenght/8.5, lenght/7, lenght/4.5, lenght/10, 0, nocolor, colorfeet);
+		rectangleRound(-lenght/3.2, -position%( Math.floor(lenght/7) +1) + lenght/8.5, lenght/7, lenght/4.5, lenght/10, 0, nocolor, colorfeet);
+	}
+	
 	corpoParado(0, 0, lenght, colorhead, colorarms, colorskin, 0);
 
 	//

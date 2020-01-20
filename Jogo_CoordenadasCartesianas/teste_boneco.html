@@ -1,6 +1,9 @@
 
 <!DOCTYPE HTML>
 <html>
+    <head>
+
+    </head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <script src="boneco_andando.js"></script>
 <body onkeydown="whichButton(event)">
@@ -9,9 +12,16 @@
         <script src="http://www.fisicainvertida.com/PSlibrary/PSlibrary.js"></script>
         <script>
             var canvas = document.getElementById('myCanvas');
-            setInterval(corpoParado, 10);
-            corpoParado(200, 200, 50, '#fad390', '#3498db', '#fad390', 0);
-            andando(400, 400, 50, '#fad390', '#3498db', '#fad390', redcolor, 7, 0);
+            var position= 0;
+            var time=1;
+            function desenhar(){
+                ctx.clearRect(0, 0, canvas.width, canvas.height);   //Limpa a tela
+                position++;
+                andando(400, 400, 50, '#fad390', '#3498db', '#fad390', darkcolor, position, 0);
+            }
+            setInterval(desenhar,150);
+            // corpoParado(200, 200, 50, '#fad390', '#3498db', '#fad390', 0);
+            // andando(400, 400, 50, '#fad390', '#3498db', '#fad390', redcolor, 25, 0);
         </script>
     </div>
     
