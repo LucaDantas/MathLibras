@@ -53,10 +53,23 @@ var boneco = {
     }
 };
 
-var target = {
-    x: 250,
-    y: 200
+//Classe padrão dos alvos, desse modo quando for personalizar a atividade pode colocar quantos alvos
+// quiser e aonde quiser (na tela) no array targets, sem ter que mexer no código
+class target {
+    constructor(x, y, actRange){
+        this.x = x;
+        this.y = y;
+        this.actRange = actRange;
+    }
 }
+
+var targets = new Array();
+//Colocar um target padrão pra teste
+targets.push(new target(300, 300, 20));
+
+//COMO TRANSFORMAR E PEGAR DE UM ARQUIVO JSON - VAI SER ÚTIL DEPOIS E FUNCIONA DESSE JEITO
+//const myJSON = JSON.stringify(targets);
+// var myObj = JSON.parse(myJSON);
 
 function desenhar(){	
 	clear(); 
