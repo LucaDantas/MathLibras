@@ -1,7 +1,7 @@
 ﻿﻿<!DOCTYPE HTML>
 <html>
 <body class="desativar">
-<canvas id="myCanvas" width="640px" height="360px"></canvas>
+<canvas id="myCanvas" width="640center.x" height="360center.x"></canvas>
 <link rel="stylesheet" href="classes.css">
 <!-- <script src="C:\Users\Usuario\Documents\PSlibrary2019/PSlibrary20192.js"></script>  -->
 <script src="PSlibrary20192.js"></script>
@@ -11,145 +11,51 @@
 //***********************************************//
 // VARIÁVEIS ---------------------------------
 
-var px = 100;       //Centro do sistema e posição inicial do boneco em X
-var py = 100;       //Centro do sistema e posição inicial do boneco em Y
-var vx = 0;         //Variação em X
-var vy = 0;         //Variação em Y
-var angle = 0;      //Ângulo do boneco
-var vel = 1;        //Velocidade do movimento do boneco
-var walk = 0;
-
-var up = false;             //Condicionais do movimento do boneco
-var down = false;
-var right = false;
-var left = false;
-
-function mup(){
-    up = true;
-    angle = 0;
-}
-function mdown(){
-    down = true;
-    angle = 180;
-}
-function mright(){
-    right = true;
-    angle = 90;
-}
-function mleft(){
-    left = true;
-    angle = 270;
-}
-function stopmoving(){
-    up = false;
-    down = false;
-    right = false;
-    left = false;
-    walk = 0;
-}
-
-function desenhar(){	
-	clear(); 
-	//**********************//	
-	//ESPAÇO PARA ANIMAÇÃO, SIMULAÇÃO OU ATIVIDADE
-
-    if(!up && !down && !right && !left){
-        corpoParado(px + vx, py + vy, 50, '#fad390', '#3498db', '#fad390', darkcolor, angle);
-    }
-    else if(up){
-        walk += vel;
-        vy -= vel*1.5;
-        andando(px + vx, py + vy, 50, '#fad390', '#3498db', '#fad390', darkcolor, walk, angle);
-    }
-    else if(down){
-        walk += vel;
-        vy += vel*1.5;
-        andando(px + vx, py + vy, 50, '#fad390', '#3498db', '#fad390', darkcolor, walk, angle);
-    }
-    else if(right){
-        walk += vel;
-        vx += vel*1.5;
-        andando(px + vx, py + vy, 50, '#fad390', '#3498db', '#fad390', darkcolor, walk, angle);
-    }
-    else if(left){
-        walk += vel;
-        vx -= vel*1.5;
-        andando(px + vx, py + vy, 50, '#fad390', '#3498db', '#fad390', darkcolor, walk, angle);
-    }
-	//**********************//	
-	animationFrame(desenhar); 	
-}
-draw(desenhar);
-</script>
-<button onmousedown="mup()" onmouseup="stopmoving()">UP</button>
-<button onmousedown="mdown()" onmouseup="stopmoving()">DOWN</button>
-<button onmousedown="mright()" onmouseup="stopmoving()">RIGHT</button>
-<button onmousedown="mleft()" onmouseup="stopmoving()">LEFT</button>
-<!-- -------------------------------------------- -->
-</body>		
-</html>
-
-
-
-<!-- 
-<!DOCTYPE HTML>
-<html>
-<body class="desativar">
-<canvas id="myCanvas" width="640px" height="360px"></canvas>
-<link rel="stylesheet" href="classes.css">
-<script src="PSlibrary20192.js"></script>
-<script src="boneco_andando.js"></script>
-<script src="http://www.fisicainvertida.com/PSlibrary/PSlibrary.js"></script>
-<script>
-//***********************************************//
-// VARIÁVEIS ---------------------------------
-
 var center = {      //Centro do sistema e ponto inicial do boneco
     x: 100,
-    y: 100,
-};
-var boneco = {       //Variáveis do boneco
-    vx: 0,
-    vy: 0,
-    angle = 0,
-    walk = 0,
-    vel = 1,
-    size: 50
-};
-var target = {      //Posições do alvo
-    x: 200,
-    y: 200
+    y: 100
 };
 
-var move = {        //Condicionais do movimento do boneco
+var boneco = {
+    vx: 0,
+    vy: 0,
+    angle: 0,
+    vel: 1,
+    walk: 0,
+    //Condicionais do movimento
     up: false,
     down: false,
     right: false,
-    left: false
+    left: false,
+    //Métodos do movimento
+    mup: function(){
+        this.up = true;
+        this.angle = 0;
+    },
+    mdown: function(){
+        this.down = true;
+        this.angle = 180;
+    },
+    mright: function(){
+        this.right = true;
+        this.angle = 90;
+    },
+    mleft: function(){
+        this.left = true;
+        this.angle = 270;
+    },
+    stopmoving: function(){
+        this.up = false;
+        this.down = false;
+        this.right = false;
+        this.left = false;
+        this.walk = 0;
+    }
 };
 
-function mup(){
-    move.up = true;
-    boneco.angle = 0;
-}
-function mdown(){
-    move.down = true;
-    boneco.angle = 180;
-}
-function mright(){
-    move.right = true;
-    boneco.angle = 90;
-}
-function mleft(){
-    move.left = true;
-    boneco.angle = 270;
-}
-function stopmoving(){
-    move.up = false;
-    move.down = false;
-    move.right = false;
-    move.left = false;
-    boneco.walk = 0;
+var target = {
+    x: 250,
+    y: 200
 }
 
 function desenhar(){	
@@ -157,38 +63,38 @@ function desenhar(){
 	//**********************//	
 	//ESPAÇO PARA ANIMAÇÃO, SIMULAÇÃO OU ATIVIDADE
 
-    
-    if(!move.up && !move.down && !move.right && !move.left){
-        corpoParado(center.y + boneco.vx, center.y + boneco.vy, boneco.size, '#fad390', '#3498db', '#fad390', darkcolor, boneco.angle);
+    if(!boneco.up && !boneco.down && !boneco.right && !boneco.left){
+        corpoParado(center.x + boneco.vx, center.y + boneco.vy, 50, '#fad390', '#3498db', '#fad390', darkcolor, boneco.angle);
     }
-    else if(move.up){
+    else if(boneco.up){
         boneco.walk += boneco.vel;
         boneco.vy -= boneco.vel*1.5;
-        andando(center.x + boneco.vx, center.y + boneco.vy, boneco.size, '#fad390', '#3498db', '#fad390', darkcolor, boneco.walk, boneco.angle);
+        andando(center.x + boneco.vx, center.y + boneco.vy, 50, '#fad390', '#3498db', '#fad390', darkcolor, boneco.walk, boneco.angle);
     }
-    else if(move.down){
+    else if(boneco.down){
         boneco.walk += boneco.vel;
         boneco.vy += boneco.vel*1.5;
-        andando(center.x + boneco.vx, center.y + boneco.vy, boneco.size, '#fad390', '#3498db', '#fad390', darkcolor, boneco.walk, boneco.angle);
+        andando(center.x + boneco.vx, center.y + boneco.vy, 50, '#fad390', '#3498db', '#fad390', darkcolor, boneco.walk, boneco.angle);
     }
-    else if(move.right){
+    else if(boneco.right){
         boneco.walk += boneco.vel;
         boneco.vx += boneco.vel*1.5;
-        andando(center.x + boneco.vx, center.y + boneco.vy, boneco.size, '#fad390', '#3498db', '#fad390', darkcolor, boneco.walk, boneco.angle);
+        andando(center.x + boneco.vx, center.y + boneco.vy, 50, '#fad390', '#3498db', '#fad390', darkcolor, boneco.walk, boneco.angle);
     }
-    else if(move.left){
+    else if(boneco.left){
         boneco.walk += boneco.vel;
         boneco.vx -= boneco.vel*1.5;
-        andando(center.x + boneco.vx, center.y + boneco.vy, boneco.size, '#fad390', '#3498db', '#fad390', darkcolor, boneco.walk, boneco.angle);
+        andando(center.x + boneco.vx, center.y + boneco.vy, 50, '#fad390', '#3498db', '#fad390', darkcolor, boneco.walk, boneco.angle);
     }
 	//**********************//	
 	animationFrame(desenhar); 	
 }
 draw(desenhar);
 </script>
-<button onmousedown="mup()" onmouseup="stopmoving()">UP</button>
-<button onmousedown="mdown()" onmouseup="stopmoving()">DOWN</button>
-<button onmousedown="mright()" onmouseup="stopmoving()">RIGHT</button>
-<button onmousedown="mleft()" onmouseup="stopmoving()">LEFT</button>
+<button onmousedown="boneco.mup()" onmouseup="boneco.stopmoving()">UP</button>
+<button onmousedown="boneco.mdown()" onmouseup="boneco.stopmoving()">DOWN</button>
+<button onmousedown="boneco.mright()" onmouseup="boneco.stopmoving()">RIGHT</button>
+<button onmousedown="boneco.mleft()" onmouseup="boneco.stopmoving()">LEFT</button>
+<!-- -------------------------------------------- -->
 </body>		
-</html> -->
+</html>
