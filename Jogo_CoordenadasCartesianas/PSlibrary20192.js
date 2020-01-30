@@ -261,7 +261,7 @@ function rectangle(x, y, w, h, stroke, rotation, colorstroke, colorfill){
 
 //Retângulo com borda arredondada
 function rectangleRound(x, y, w, h, r, stroke, colorstroke, colorfill){
-	var x; y; w; h; r; stroke; colorstroke; colorfill;
+	// var x; y; w; h; r; stroke; colorstroke; colorfill;
 	var pontox = [x, x + r, x + w - r, x + w];
 	var pontoy = [y, y - r, y - h + r, y - h]; 
 	ctx.beginPath();		
@@ -276,7 +276,7 @@ function rectangleRound(x, y, w, h, r, stroke, colorstroke, colorfill){
 	ctx.quadraticCurveTo(pontox[0], pontoy[0], pontox[0], pontoy[1]);	 
 	ctx.lineWidth = stroke;
 	ctx.strokeStyle = colorstroke;	
-	ctx.fillStyle = nocolor;
+	ctx.fillStyle = colorfill;
 	ctx.fill();				
 	ctx.stroke();
 }
