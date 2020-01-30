@@ -1,12 +1,11 @@
 ﻿﻿<!DOCTYPE HTML>
 <html>
 <body class="desativar">
-<canvas id="myCanvas" width="640center.x" height="360center.x"></canvas>
+<canvas id="myCanvas" width="640px" height="360px"></canvas>
 <link rel="stylesheet" href="classes.css">
-<!-- <script src="C:\Users\Usuario\Documents\PSlibrary2019/PSlibrary20192.js"></script>  -->
 <script src="PSlibrary20192.js"></script>
 <script src="boneco_andando.js"></script>
-<!-- <script src="http://www.fisicainvertida.com/PSlibrary/PSlibrary.js"></script> -->
+<script src="bandeira.js"></script>
 <script>
 //***********************************************//
 // VARIÁVEIS ---------------------------------
@@ -19,7 +18,7 @@ var center = {      //Centro do sistema e ponto inicial do boneco
 var boneco = {
     vx: 0,
     vy: 0,
-    angle: 0,
+    angle: 180,
     vel: 1,
     walk: 0,
     size: 50,
@@ -65,41 +64,42 @@ class target {
     }
 }
 
+var now = 0;        //I HAD SOME PROBLEMS WITH IT INSIDE THE TARGETS STRUCT SO I'L DECLARE IT HERE - IT HELPS TO CONFIRM THE CHECKPOINTS
 var targets = {
     arr : new Array(),
-    // arrdraw : new Array(),
     order : true,
-    now : 0,
     confirm : function(){
-        alert('oi');
-        if(this.order){
-            alert('kk');
-            alert(this.arr[0].x);            
-            if(dist2point(boneco.vx + center.x, boneco.vy + center.y, this.arr[0].x, this.arr[0].y) <= this.arr[0].actRange) alert('Certo');
-            else alert('Errado');
+        if(now == this.arr.length) alert('Acabou');
+        else if(this.order){           
+            if(dist2point(boneco.vx + center.x, boneco.vy + center.y, this.arr[now].x, this.arr[now].y) <= this.arr[now].actRange + boneco.size/5){
+                alert('Certo');
+                now++;
+            } 
+            else{
+                alert('Errado, você voltará ao checkpoint anterior');
+                if(!now) {boneco.vx = 0; boneco.vy = 0; boneco.angle = 180;} 
+                else{
+                    boneco.vx = this.arr[now-1].x - center.x;
+                    boneco.vy = this.arr[now-1].y - center.y;
+                }
+            } 
         }        
     }
-    // draw : function(){
-    //     for(let i = 0; i < this.arr.lenght; i++){
-    //         if(this.arr[i].show) this.arrdraw.push(this.arr[i])
-    //     }
-    // }
 };
 //Colocar um target padrão pra teste
 targets.arr.push(new target(300, 300, 10, true));
 targets.arr.push(new target(120, 200, 5, true));
+targets.arr.push(new target(10, 200, 5, true));
 //Se deve definir se os alvos vão ser pegos ordenados ou em qualquer ordem (Por padrão eles são definidos como ordenados)
 
 //COMO TRANSFORMAR E PEGAR DE UM ARQUIVO JSON - VAI SER ÚTIL DEPOIS E FUNCIONA DESSE JEITO
 // const myJSON = JSON.stringify(targets);
 // var myObj = JSON.parse(myJSON);
 
-//É PRECISO CHAMAR ESSA FUNÇÃO DEPOIS DE TODO ALVO NOVO COLOCADO PARA PODER DESENHÁ-LO (SE QUISER DESENHAR)
-// targets.draw();
-
 
 function desenhar(){	
-	clear(); 
+    clear(); 
+    rectangle(0, 0, canvas.width, canvas.height, 1, 0, darkcolor, nocolor);
 	//**********************//	
 	//ESPAÇO PARA ANIMAÇÃO, SIMULAÇÃO OU ATIVIDADE
 
@@ -107,31 +107,21 @@ function desenhar(){
     if(!boneco.up && !boneco.down && !boneco.right && !boneco.left){
         corpoParado(center.x + boneco.vx, center.y + boneco.vy, boneco.size, '#fad390', '#3498db', '#fad390', darkcolor, boneco.angle);
     }
-    else if(boneco.up){
+    else{
+        if(boneco.up) boneco.vy -= boneco.vel*1.5;
+        else if(boneco.down) boneco.vy += boneco.vel*1.5;
+        else if(boneco.right) boneco.vx += boneco.vel*1.5;
+        else if(boneco.left) boneco.vx -= boneco.vel*1.5;
         boneco.walk += boneco.vel;
-        boneco.vy -= boneco.vel*1.5;
-        andando(center.x + boneco.vx, center.y + boneco.vy, boneco.size, '#fad390', '#3498db', '#fad390', darkcolor, boneco.walk, boneco.angle);
-    }
-    else if(boneco.down){
-        boneco.walk += boneco.vel;
-        boneco.vy += boneco.vel*1.5;
-        andando(center.x + boneco.vx, center.y + boneco.vy, boneco.size, '#fad390', '#3498db', '#fad390', darkcolor, boneco.walk, boneco.angle);
-    }
-    else if(boneco.right){
-        boneco.walk += boneco.vel;
-        boneco.vx += boneco.vel*1.5;
-        andando(center.x + boneco.vx, center.y + boneco.vy, boneco.size, '#fad390', '#3498db', '#fad390', darkcolor, boneco.walk, boneco.angle);
-    }
-    else if(boneco.left){
-        boneco.walk += boneco.vel;
-        boneco.vx -= boneco.vel*1.5;
         andando(center.x + boneco.vx, center.y + boneco.vy, boneco.size, '#fad390', '#3498db', '#fad390', darkcolor, boneco.walk, boneco.angle);
     }
     
-    //DESENHA AS BANDEIRAS
-    // alert(targets.arr.length);
+    //DESENHA AS BANDEIRAS QUE FORAM MARCADOS COMO QUE ERA PRA DESENHAR
     for(let i = 0; i < targets.arr.length; i++){
-        if(targets.arr[i].show) circle(targets.arr[i].x, targets.arr[i].y, targets.arr[i].actRange, 1, darkcolor, redcolor);
+        if(targets.arr[i].show){
+            circle(targets.arr[i].x, targets.arr[i].y, targets.arr[i].actRange, 1, nocolor, '#34495e');
+            flag(targets.arr[i].x, targets.arr[i].y, darkcolor, redcolor, 50)
+        } 
     }
 
 	//**********************//	
