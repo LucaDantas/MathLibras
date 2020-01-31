@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<body class="desativar" onkeydown="whichButton(event)" onkeyup="boneco.stopmoving()" onmouseup="boneco.stopmoving()">
+<body class="desativar" onkeydown="whichButton(event)" onkeyup="boneco.stopmoving()">
 <canvas id="myCanvas" width="640px" height="360px"></canvas>
 <link rel="stylesheet" href="classes.css">
 <script src="PSlibrary20192.js"></script>
@@ -25,44 +25,25 @@ var boneco = {
     walk: 0,
     size: 50,
     //Condicionais do movimento
-    up: false,
-    down: false,
-    right: false,
-    left: false,
+    front: false,
+    back: false,
     //Métodos do movimento
-    mup: function(){
-        this.up = true;
-        this.down = false;
-        this.right = false;
-        this.left = false;
-        this.angle = 0;
+    mfront: function(){
+        this.front = true;
     },
-    mdown: function(){
-        this.down = true;
-        this.up = false;
-        this.right = false;
-        this.left = false;
+    mback: function(){
+        this.back = true;
         this.angle = 180;
     },
-    mright: function(){
-        this.right = true;
-        this.up = false;
-        this.down = false;
-        this.left = false;
-        this.angle = 90;
+    tclockwise: function(){
+        this.angle += 25;
     },
-    mleft: function(){
-        this.left = true;
-        this.up = false;
-        this.down = false;
-        this.right = false;
-        this.angle = 270;
+    tcounterclockwise: function(){
+        this.angle -= 25;
     },
     stopmoving: function(){
-        this.up = false;
-        this.down = false;
-        this.right = false;
-        this.left = false;
+        this.front = false;
+        this.back = false;
         this.walk = 0;
     }
 };
@@ -142,10 +123,11 @@ function desenhar(){
         corpoParado(center.x + boneco.vx, center.y + boneco.vy, boneco.size, '#fad390', '#3498db', '#fad390', darkcolor, boneco.angle);
     }
     else{
-        if(boneco.up) boneco.vy -= boneco.vel*1.5;
-        else if(boneco.down) boneco.vy += boneco.vel*1.5;
-        else if(boneco.right) boneco.vx += boneco.vel*1.5; 
-        else if(boneco.left) boneco.vx -= boneco.vel*1.5;
+        if(boneco.front){
+            boneco.vx += Math.cos(Math.PI*boneco.angle/360)*1.5;
+            boneco.vy += Math.sin(Math.PI*boneco.angle/360)*1.5;
+        } 
+        else if(boneco.back) boneco.vy += boneco.vel*1.5;
         boneco.walk += boneco.vel;
         andando(center.x + boneco.vx, center.y + boneco.vy, boneco.size, '#fad390', '#3498db', '#fad390', darkcolor, boneco.walk, boneco.angle);
     }
@@ -170,16 +152,16 @@ function desenhar(){
 
 function whichButton(event) {
     if (event.keyCode == 87 || event.keyCode == 38) {
-        boneco.mup();
+        boneco.mfront();
     }
     else if (event.keyCode == 83 || event.keyCode == 40) {
-        boneco.mdown();
+        boneco.mback();
     }
     else if (event.keyCode == 68 || event.keyCode == 39) {
-        boneco.mright();
+        boneco.tclockwise();
     }
     else if (event.keyCode == 65 || event.keyCode == 37) {
-        boneco.mleft();
+        boneco.tcounterclockwise();
     }
     else if (event.keyCode == 13 || event.keyCode == 81) {
         targets.confirm();
@@ -190,10 +172,10 @@ function whichButton(event) {
 draw(desenhar);
 </script>
 <!-- BOTÕES DE CONTROLE -->
-<button onmousedown="boneco.mup()" onmouseup="boneco.stopmoving()">UP</button>
-<button onmousedown="boneco.mdown()" onmouseup="boneco.stopmoving()">DOWN</button>
-<button onmousedown="boneco.mright()" onmouseup="boneco.stopmoving()">RIGHT</button>
-<button onmousedown="boneco.mleft()" onmouseup="boneco.stopmoving()">LEFT</button>
+<button onmousedown="boneco.mfront()" onmouseup="boneco.stopmoving()">UP</button>
+<button onmousedown="boneco.mback()" onmouseup="boneco.stopmoving()">DOWN</button>
+<button onclick="boneco.tclockwise()">ClockWise</button>
+<button onclick="boneco.tcounterclockwise()">CounterClockWise</button>
 <button onclick="targets.confirm()">CONFIRM</button>
 <!-- -------------------------------------------- -->
 </body>		
