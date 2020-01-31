@@ -1,0 +1,165 @@
+<!DOCTYPE HTML>
+<html>
+<body class="desativar">
+<canvas id="myCanvas" width="640px" height="360px"></canvas>
+<link rel="stylesheet" href="classes.css">
+<script src="PSlibrary20192.js"></script>
+<script src="boneco_andando.js"></script>
+<script src="bandeira.js"></script>
+<script>
+//***********************************************//
+// VARIÁVEIS ---------------------------------
+
+//THIS VERSION I'LL DO THE ONE THAT THE FLAG APPEARS WHEN CONFIRMATE IT BUT YOU'LL NOT SEE IT, ONLY THE STEPS AND THE DIRECTIONS (N,S,W,E)
+
+var center = {      //Centro do sistema e ponto inicial do boneco
+    x: 100,
+    y: 100
+};
+
+var boneco = {
+    vx: 0,
+    vy: 0,
+    angle: 180,
+    vel: 1,
+    walk: 0,
+    size: 50,
+    //Condicionais do movimento
+    up: false,
+    down: false,
+    right: false,
+    left: false,
+    //Métodos do movimento
+    mup: function(){
+        this.up = true;
+        this.angle = 0;
+    },
+    mdown: function(){
+        this.down = true;
+        this.angle = 180;
+    },
+    mright: function(){
+        this.right = true;
+        this.angle = 90;
+    },
+    mleft: function(){
+        this.left = true;
+        this.angle = 270;
+    },
+    stopmoving: function(){
+        this.up = false;
+        this.down = false;
+        this.right = false;
+        this.left = false;
+        this.walk = 0;
+    }
+};
+
+//Classe padrão dos alvos, desse modo quando for personalizar a atividade pode colocar quantos alvos
+// quiser e aonde quiser (na tela) no array targets, sem ter que mexer no código
+class target {
+    constructor(x, y, actRange, show){
+        this.x = x;                 //Position
+        this.y = y;
+        this.actRange = actRange;   //Range that activates it
+        this.show = show;           //Wheter or not to show to a flag over it (If unactive it won't show anything)
+    }
+}
+
+var now = 0;        //I HAD SOME PROBLEMS WITH IT INSIDE THE TARGETS STRUCT SO I'L DECLARE IT HERE - IT HELPS TO CONFIRM THE CHECKPOINTS
+var targets = {
+    arr : new Array(),
+    order : true,
+    confirm : function(){
+        if(now == this.arr.length) alert('Acabou');
+        else if(this.order){           
+            if(dist2point(boneco.vx + center.x, boneco.vy + center.y, this.arr[now].x, this.arr[now].y) <= this.arr[now].actRange + boneco.size/5){
+                alert('Certo');
+                this.arr[now].show = true;
+                now++;
+                pos.lx = boneco.vx;
+                pos.ly = boneco.vy;
+            } 
+            else{
+                alert('Errado, você voltará ao checkpoint anterior');
+                if(!now) {boneco.vx = 0; boneco.vy = 0; boneco.angle = 180;} 
+                else{
+                    boneco.vx = this.arr[now-1].x - center.x;
+                    boneco.vy = this.arr[now-1].y - center.y;
+                    pos.lx = boneco.vx;
+                    pos.ly = boneco.vy;
+                }
+            } 
+        }
+        //NOT WORKING RN SO I'LL FIX IT LATER - ONLY ORDERED CONFIRM WORKING
+        // else{
+        //     for(let i = 0; i < this.arr.length; i++){
+        //         if(dist2point(boneco.vx + center.x, boneco.vy + center.y, this.arr[i].x, this.arr[i].y) <= this.arr[i].actRange + boneco.size/5){
+        //             if(seen[i]) alert('Você já passou por aqui!');
+        //             else{seen[i] = true; alert('Muito bem!');}
+        //         }
+        //     }
+        // }        
+    }
+};
+
+var pos = {
+    lx:0, ly:0
+};
+
+//Colocar um target padrão pra teste
+targets.arr.push(new target(100, 325, 15, false));
+targets.arr.push(new target(500, 325, 15, false));
+targets.arr.push(new target(500, 175, 15, false));
+//Se deve definir se os alvos vão ser pegos ordenados ou em qualquer ordem (Por padrão eles são definidos como ordenados)
+
+//COMO TRANSFORMAR E PEGAR DE UM ARQUIVO JSON - VAI SER ÚTIL DEPOIS E FUNCIONA DESSE JEITO
+// const myJSON = JSON.stringify(targets);
+// var myObj = JSON.parse(myJSON);
+
+
+function desenhar(){	
+    clear(); 
+    rectangle(0, 0, canvas.width, canvas.height, 1, 0, darkcolor, nocolor);
+	//**********************//	
+	//ESPAÇO PARA ANIMAÇÃO, SIMULAÇÃO OU ATIVIDADE
+
+    //FUNÇÕES DO MOVIMENTO DO BONECO
+    if(!boneco.up && !boneco.down && !boneco.right && !boneco.left){
+        corpoParado(center.x + boneco.vx, center.y + boneco.vy, boneco.size, '#fad390', '#3498db', '#fad390', darkcolor, boneco.angle);
+    }
+    else{
+        if(boneco.up) boneco.vy -= boneco.vel*1.5;
+        else if(boneco.down) boneco.vy += boneco.vel*1.5;
+        else if(boneco.right) boneco.vx += boneco.vel*1.5; 
+        else if(boneco.left) boneco.vx -= boneco.vel*1.5;
+        boneco.walk += boneco.vel;
+        andando(center.x + boneco.vx, center.y + boneco.vy, boneco.size, '#fad390', '#3498db', '#fad390', darkcolor, boneco.walk, boneco.angle);
+    }
+    
+    //DESENHA AS BANDEIRAS QUE FORAM MARCADOS COMO QUE ERA PRA DESENHAR
+    for(let i = 0; i < targets.arr.length; i++){
+        if(targets.arr[i].show){
+            // circle(targets.arr[i].x, targets.arr[i].y, targets.arr[i].actRange, 1, nocolor, '#34495e');
+            flag(targets.arr[i].x, targets.arr[i].y, darkcolor, redcolor, 50);
+        } 
+    }
+
+    //CONTADOR DE METROS PERCORRIDOS
+    textBold( Math.abs(Math.floor(boneco.vx/50 - pos.lx/50 + boneco.vy/50 - pos.ly/50)) + " metros", 10, 'Arial', 20, 20, darkcolor);
+
+
+
+	//**********************//	
+	animationFrame(desenhar); 	
+}
+draw(desenhar);
+</script>
+<button onmousedown="boneco.mup()" onmouseup="boneco.stopmoving()">UP</button>
+<button onmousedown="boneco.mdown()" onmouseup="boneco.stopmoving()">DOWN</button>
+<button onmousedown="boneco.mright()" onmouseup="boneco.stopmoving()">RIGHT</button>
+<button onmousedown="boneco.mleft()" onmouseup="boneco.stopmoving()">LEFT</button>
+<button onclick="targets.confirm()">CONFIRM</button>
+<!-- -------------------------------------------- -->
+</body>		
+</html>

@@ -1,6 +1,6 @@
 ﻿﻿<!DOCTYPE HTML>
 <html>
-<body class="desativar">
+<body class="desativar" >
 <canvas id="myCanvas" width="640px" height="360px"></canvas>
 <link rel="stylesheet" href="classes.css">
 <script src="PSlibrary20192.js"></script>
@@ -83,13 +83,24 @@ var targets = {
                     boneco.vy = this.arr[now-1].y - center.y;
                 }
             } 
-        }        
+        }
+        //NOT WORKING RN SO I'LL FIX IT LATER - ONLY ORDERED CONFIRM WORKING
+        // else{
+        //     for(let i = 0; i < this.arr.length; i++){
+        //         if(dist2point(boneco.vx + center.x, boneco.vy + center.y, this.arr[i].x, this.arr[i].y) <= this.arr[i].actRange + boneco.size/5){
+        //             if(seen[i]) alert('Você já passou por aqui!');
+        //             else{seen[i] = true; alert('Muito bem!');}
+        //         }
+        //     }
+        // }        
     }
 };
+
+
 //Colocar um target padrão pra teste
-targets.arr.push(new target(300, 300, 10, true));
-targets.arr.push(new target(120, 200, 5, true));
-targets.arr.push(new target(10, 200, 5, true));
+targets.arr.push(new target(100, 300, 10, true));
+targets.arr.push(new target(500, 300, 5, true));
+targets.arr.push(new target(500, 150, 5, true));
 //Se deve definir se os alvos vão ser pegos ordenados ou em qualquer ordem (Por padrão eles são definidos como ordenados)
 
 //COMO TRANSFORMAR E PEGAR DE UM ARQUIVO JSON - VAI SER ÚTIL DEPOIS E FUNCIONA DESSE JEITO
