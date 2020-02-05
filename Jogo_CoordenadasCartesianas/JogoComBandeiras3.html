@@ -20,7 +20,7 @@ var center = {      //Centro do sistema e ponto inicial do boneco
 var boneco = {
     vx: 0,
     vy: 0,
-    angle: 180,
+    angle: 0,
     vel: 1,
     walk: 0,
     size: 50,
@@ -33,13 +33,12 @@ var boneco = {
     },
     mback: function(){
         this.back = true;
-        this.angle = 180;
     },
     tclockwise: function(){
-        this.angle += 25;
+        this.angle += 22.5;
     },
     tcounterclockwise: function(){
-        this.angle -= 25;
+        this.angle -= 22.5;
     },
     stopmoving: function(){
         this.front = false;
@@ -101,9 +100,9 @@ var pos = {
 };
 //***************************************************************************************************
 //Acrescentar/retirar pontos - true/false controla exibição.
-targets.arr.push(new target(100, 300, 10, false));
-targets.arr.push(new target(500, 300, 10, false));
-targets.arr.push(new target(500, 150, 10, false));
+targets.arr.push(new target(500, 300, 10, true));
+targets.arr.push(new target(100, 300, 10, true));
+targets.arr.push(new target(500, 150, 10, true));
 //***************************************************************************************************
 //Se deve definir se os alvos vão ser pegos ordenados ou em qualquer ordem (Por padrão eles são definidos como ordenados)
 
@@ -119,15 +118,18 @@ function desenhar(){
 	//ESPAÇO PARA ANIMAÇÃO, SIMULAÇÃO OU ATIVIDADE
 
     //FUNÇÕES DO MOVIMENTO DO BONECO
-    if(!boneco.up && !boneco.down && !boneco.right && !boneco.left){
+    if(!boneco.front && !boneco.back){
         corpoParado(center.x + boneco.vx, center.y + boneco.vy, boneco.size, '#fad390', '#3498db', '#fad390', darkcolor, boneco.angle);
     }
     else{
         if(boneco.front){
-            boneco.vx += Math.cos(Math.PI*boneco.angle/360)*1.5;
-            boneco.vy += Math.sin(Math.PI*boneco.angle/360)*1.5;
+            boneco.vx += Math.sin( (Math.PI*boneco.angle/180)%(2*Math.PI) )*1.5;
+            boneco.vy -= Math.cos( (Math.PI*boneco.angle/180)%(2*Math.PI) )*1.5;
         } 
-        else if(boneco.back) boneco.vy += boneco.vel*1.5;
+        else if(boneco.back){
+            boneco.vx -= Math.sin( (Math.PI*boneco.angle/180)%(2*Math.PI) )*1.5;
+            boneco.vy += Math.cos( (Math.PI*boneco.angle/180)%(2*Math.PI) )*1.5;
+        }
         boneco.walk += boneco.vel;
         andando(center.x + boneco.vx, center.y + boneco.vy, boneco.size, '#fad390', '#3498db', '#fad390', darkcolor, boneco.walk, boneco.angle);
     }
@@ -142,7 +144,8 @@ function desenhar(){
 
     //CONTADOR DE METROS PERCORRIDOS
     textBold( Math.abs(Math.floor(10*(boneco.vx/50 - pos.lx/50 + boneco.vy/50 - pos.ly/50)))/10 + " metros", 10, 'Arial', 20, 30, darkcolor);
-    rectangle(15, 15, 65, 22, 1, 0, darkcolor, nocolor);
+    rectangle(15, 15, 75, 22, 1, 0, darkcolor, nocolor);
+    // textBold( boneco.angle%360, 10, 'Arial', 100, 30, darkcolor);
 
 	//**********************//	
 	animationFrame(desenhar); 	
@@ -172,10 +175,10 @@ function whichButton(event) {
 draw(desenhar);
 </script>
 <!-- BOTÕES DE CONTROLE -->
-<button onmousedown="boneco.mfront()" onmouseup="boneco.stopmoving()">UP</button>
-<button onmousedown="boneco.mback()" onmouseup="boneco.stopmoving()">DOWN</button>
-<button onclick="boneco.tclockwise()">ClockWise</button>
-<button onclick="boneco.tcounterclockwise()">CounterClockWise</button>
+<button onmousedown="boneco.mfront()" onmouseup="boneco.stopmoving()">Front</button>
+<button onmousedown="boneco.mback()" onmouseup="boneco.stopmoving()">Back</button>
+<button onclick="boneco.tclockwise()">Sent. Horário</button>
+<button onclick="boneco.tcounterclockwise()">Sent. Anti-Horário</button>
 <button onclick="targets.confirm()">CONFIRM</button>
 <!-- -------------------------------------------- -->
 </body>		
