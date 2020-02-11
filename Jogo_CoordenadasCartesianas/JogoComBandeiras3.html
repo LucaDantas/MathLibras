@@ -36,9 +36,15 @@ var boneco = {
     },
     tclockwise: function(){
         this.angle += 22.5;
+        pos.arm += dist2point(pos.lx/50, pos.ly/50, this.vx/50, this.vy/50);
+        pos.ly = this.vy;
+        pos.lx = this.vx;
     },
     tcounterclockwise: function(){
         this.angle -= 22.5;
+        pos.arm += dist2point(pos.lx/50, pos.ly/50, this.vx/50, this.vy/50);
+        pos.ly = this.vy;
+        pos.lx = this.vx;
     },
     stopmoving: function(){
         this.front = false;
@@ -71,15 +77,17 @@ var targets = {
                 now++;
                 pos.lx = boneco.vx;
                 pos.ly = boneco.vy;
+                pos.arm = 0;
             } 
             else{
                 alert('Errado, você voltará ao checkpoint anterior');
-                if(!now) {boneco.vx = 0; boneco.vy = 0; boneco.angle = 180;} 
+                if(!now) {boneco.vx = 0; boneco.vy = 0; boneco.angle = 180; pos.arm = 0;} 
                 else{
                     boneco.vx = this.arr[now-1].x - center.x;
                     boneco.vy = this.arr[now-1].y - center.y;
                     pos.lx = boneco.vx;
                     pos.ly = boneco.vy;
+                    pos.arm = 0;        
                 }
             } 
         }
@@ -96,7 +104,7 @@ var targets = {
 };
 
 var pos = {
-    lx:0, ly:0
+    lx:0, ly:0, arm: 0
 };
 //***************************************************************************************************
 //Acrescentar/retirar pontos - true/false controla exibição.
@@ -105,10 +113,6 @@ targets.arr.push(new target(100, 300, 10, true));
 targets.arr.push(new target(500, 150, 10, true));
 //***************************************************************************************************
 //Se deve definir se os alvos vão ser pegos ordenados ou em qualquer ordem (Por padrão eles são definidos como ordenados)
-
-//COMO TRANSFORMAR E PEGAR DE UM ARQUIVO JSON - VAI SER ÚTIL DEPOIS E FUNCIONA DESSE JEITO
-// const myJSON = JSON.stringify(targets);
-// var myObj = JSON.parse(myJSON);
 
 
 function desenhar(){	
@@ -125,13 +129,16 @@ function desenhar(){
         if(boneco.front){
             boneco.vx += Math.sin( (Math.PI*boneco.angle/180)%(2*Math.PI) )*1.5;
             boneco.vy -= Math.cos( (Math.PI*boneco.angle/180)%(2*Math.PI) )*1.5;
+            boneco.walk += boneco.vel;
+            andando(center.x + boneco.vx, center.y + boneco.vy, boneco.size, '#fad390', '#3498db', '#fad390', darkcolor, boneco.walk, boneco.angle);
         } 
-        else if(boneco.back){
+        else if(boneco.back && Math.abs(Math.floor(10*(boneco.vx/50 - pos.lx/50 + boneco.vy/50 - pos.ly/50)))/10){
             boneco.vx -= Math.sin( (Math.PI*boneco.angle/180)%(2*Math.PI) )*1.5;
             boneco.vy += Math.cos( (Math.PI*boneco.angle/180)%(2*Math.PI) )*1.5;
+            boneco.walk += boneco.vel;
+            andando(center.x + boneco.vx, center.y + boneco.vy, boneco.size, '#fad390', '#3498db', '#fad390', darkcolor, boneco.walk, boneco.angle);
         }
-        boneco.walk += boneco.vel;
-        andando(center.x + boneco.vx, center.y + boneco.vy, boneco.size, '#fad390', '#3498db', '#fad390', darkcolor, boneco.walk, boneco.angle);
+        else corpoParado(center.x + boneco.vx, center.y + boneco.vy, boneco.size, '#fad390', '#3498db', '#fad390', darkcolor, boneco.angle);
     }
     
     //DESENHA AS BANDEIRAS QUE FORAM MARCADOS COMO QUE ERA PRA DESENHAR
@@ -143,9 +150,8 @@ function desenhar(){
     }
 
     //CONTADOR DE METROS PERCORRIDOS
-    textBold( Math.abs(Math.floor(10*(boneco.vx/50 - pos.lx/50 + boneco.vy/50 - pos.ly/50)))/10 + " metros", 10, 'Arial', 20, 30, darkcolor);
+    textBold( (dist2point(pos.lx/50, pos.ly/50, boneco.vx/50, boneco.vy/50) + pos.arm).toFixed(1) + " metros", 10, 'Arial', 20, 30, darkcolor);
     rectangle(15, 15, 75, 22, 1, 0, darkcolor, nocolor);
-    // textBold( boneco.angle%360, 10, 'Arial', 100, 30, darkcolor);
 
 	//**********************//	
 	animationFrame(desenhar); 	

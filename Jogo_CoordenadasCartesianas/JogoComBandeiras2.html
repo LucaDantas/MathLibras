@@ -159,7 +159,7 @@ function desenhar(){
     }
 
     //CONTADOR DE METROS PERCORRIDOS
-    textBold( Math.abs(Math.floor(10*(boneco.vx/50 - pos.lx/50 + boneco.vy/50 - pos.ly/50)))/10 + " metros", 10, 'Arial', 20, 30, darkcolor);
+    textBold( (Math.abs(Math.floor(10*(boneco.vx/50 - pos.lx/50 + boneco.vy/50 - pos.ly/50)))/10).toFixed(1) + " metros", 10, 'Arial', 20, 30, darkcolor);
     rectangle(15, 15, 65, 22, 1, 0, darkcolor, nocolor);
 
 	//**********************//	
