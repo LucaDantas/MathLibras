@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html>
+<body onload="desenhar()" style="height: 360px; width: 640px;">
+	<canvas id="myCanvas" width="640" height="360"></canvas>
+	<script src="source_js/funcGeraldo.js"></script>
+	<script src="source_js/classes.js"></script>
+	<script>
+		//------------------------------------------------------------->
+		// Tudo que pode e precisar mexer esta nesse arquivo
+		// As coisas que fazem funcionar estao na pasta source_js
+
+		// Centro do sistema (x, y)
+		var center = new Point(200, 180);
+
+		// Configurações do espelho (raio, centro, ang em cima, ang em baixo, cor, espessura)
+		var mirror = { rad : 150, c : center, angUP : 60, angDOWN : 60, color : darkcolor, stroke : 1 };
+
+		// Posições da fonte de luz (x, y), x >= centro do espelho para funcionar
+		var obj = new Point(mirror.c.x+10, mirror.c.y-100);
+
+		// Posição inicial do ponto de reflexao (o x é automatico)
+		var target = new Point(0, 248);
+
+		// Foco (x, y)
+		var foco = new Point(mirror.c.x - mirror.rad/2, mirror.c.y);
+
+		// Vertice (x, y)
+		var vertice = new Point(mirror.c.x - mirror.rad, mirror.c.y);
+
+		// Eixo (Ponto centro, Ponto vertice)
+		var eixo = new Line(mirror.c, vertice);
+		
+		// Não mexer nesses de baixo
+		var source = new Line(obj, target);
+		var ctr = new Line(mirror.c, target);
+		var reflected = new Ray(target, 0, 150);
+
+		function desenhar() {
+			upd();
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			
+			// Centro
+			point(mirror.c.x, mirror.c.y, mirror.color);
+
+			// Vertice
+			point(vertice.x, vertice.y, mirror.color);
+			
+			// Foco
+			point(foco.x, foco.y, mirror.color);
+
+			// Eixo Principal
+			line(eixo.p1.x, eixo.p1.y, eixo.p2.x, eixo.p2.y, 1, darkcolor);
+
+			// Fonte de luz
+			point(obj.x, obj.y, redcolor);
+			
+			// Ponto de reflexão
+			point(target.x, target.y, redcolor);
+			
+			// Arco do espelho
+			arcCircle2(mirror.c.x, mirror.c.y, mirror.rad, 180-mirror.angDOWN, 180+mirror.angUP, mirror.stroke, mirror.color);
+			
+			// Raio fonte
+			line(source.p1.x, source.p1.y, source.p2.x, source.p2.y, 1, redcolor);
+
+			// Linha pontilhada do eixo de reflexão
+			linedash(ctr.p1.x, ctr.p1.y, ctr.lenght(), 1, darkcolor, angLinha());
+			
+			// Raio refletido
+			vector(reflected.p1.x, reflected.p1.y, reflected.size, reflected.ang, 1, orangecolor);
+		}
+	</script>
+
+	<button onclick="targetUP()">CIMA</button>
+	<button onclick="targetDOWN()">BAIXO</button>
+</body>
+</html>
