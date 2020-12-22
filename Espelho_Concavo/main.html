@@ -12,14 +12,11 @@
 		// Centro do sistema (x, y)
 		var center = new Point(200, 180);
 
-		// Configurações do espelho (raio, centro, ang em cima, ang em baixo, cor, espessura)
-		var mirror = { rad : 150, c : center, angUP : 60, angDOWN : 60, color : darkcolor, stroke : 1 };
+		// Configurações do espelho (raio, centro, ang em cima, ang em baixo, cor, espessura, limites para ponto de reflexão)
+		var mirror = { rad : 150, c : center, angUP : 60, angDOWN : 60, color : darkcolor, stroke : 1, width : 120 };
 
 		// Posições da fonte de luz (x, y), x >= centro do espelho para funcionar
-		var obj = new Point(mirror.c.x+10, mirror.c.y-100);
-
-		// Posição inicial do ponto de reflexao (o x é automatico)
-		var target = new Point(0, 248);
+		var obj = new Point(mirror.c.x+10, mirror.c.y-25);
 
 		// Foco (x, y)
 		var foco = new Point(mirror.c.x - mirror.rad/2, mirror.c.y);
@@ -29,11 +26,28 @@
 
 		// Eixo (Ponto centro, Ponto vertice)
 		var eixo = new Line(mirror.c, vertice);
-		
-		// Não mexer nesses de baixo
-		var source = new Line(obj, target);
-		var ctr = new Line(mirror.c, target);
-		var reflected = new Ray(target, 0, 150);
+
+		// Cores
+		var corRaios = orangecolor; corEixo = darkcolor; corFonte = redcolor;
+
+		// Posição inicial do ponto de reflexao (automatico)
+		var n = 3;
+		var target = new Array(n);
+		for(var i = 0; i < n; i++) {
+			// target[i] = new Point(0, 248);
+			target[i] = new Point(0, mirror.c.y+mirror.width-(i+1)*2*mirror.width/(n+1));
+		}
+
+		// Não mexer
+		var source = new Array(n);
+		var ctr = new Array(n);
+		var reflected = new Array(n);
+		for(var i = 0; i < n; i++) {
+			source[i] = new Line(obj, target[i]);
+			ctr[i] = new Line(mirror.c, target[i]);
+			// O último altera o tamanho do raio refletido
+			reflected[i] = new Ray(target[i], 0, 200);
+		}
 
 		function desenhar() {
 			upd();
@@ -49,29 +63,41 @@
 			point(foco.x, foco.y, mirror.color);
 
 			// Eixo Principal
-			line(eixo.p1.x, eixo.p1.y, eixo.p2.x, eixo.p2.y, 1, darkcolor);
+			line(eixo.p1.x, eixo.p1.y, eixo.p2.x, eixo.p2.y, 1, corEixo);
 
 			// Fonte de luz
-			point(obj.x, obj.y, redcolor);
+			point(obj.x, obj.y, corFonte);
 			
 			// Ponto de reflexão
-			point(target.x, target.y, redcolor);
+			for(var i = 0; i < n; i++) {
+				point(target[i].x, target[i].y, corRaios);
+			}
 			
 			// Arco do espelho
 			arcCircle2(mirror.c.x, mirror.c.y, mirror.rad, 180-mirror.angDOWN, 180+mirror.angUP, mirror.stroke, mirror.color);
 			
 			// Raio fonte
-			line(source.p1.x, source.p1.y, source.p2.x, source.p2.y, 1, redcolor);
+			for(var i = 0; i < n; i++) {
+				line(source[i].p1.x, source[i].p1.y, source[i].p2.x, source[i].p2.y, 1, corRaios);
+			}
 
 			// Linha pontilhada do eixo de reflexão
-			linedash(ctr.p1.x, ctr.p1.y, ctr.lenght(), 1, darkcolor, angLinha());
+			// Comentado para evitar poluição visual da aplicação, para reativar basta descomentar
+			// for(var i = 0; i < n; i++) {
+			// 	linedash(ctr[i].p1.x, ctr[i].p1.y, ctr[i].lenght(), 1, corEixo, angLinha(i));
+			// }
 			
 			// Raio refletido
-			vector(reflected.p1.x, reflected.p1.y, reflected.size, reflected.ang, 1, orangecolor);
+			for(var i = 0; i < n; i++) {
+				vector(reflected[i].p1.x, reflected[i].p1.y, reflected[i].size, reflected[i].ang, 1, corRaios);
+			}
 		}
 	</script>
 
 	<button onclick="targetUP()">CIMA</button>
 	<button onclick="targetDOWN()">BAIXO</button>
+	<button onclick="up()">Trocar Raio +</button>
+	<button onclick="down()">Trocar Raio -</button>
+	<p id = "qtd">1</p>
 </body>
 </html>

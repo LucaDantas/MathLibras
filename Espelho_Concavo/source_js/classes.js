@@ -42,22 +42,30 @@ function find(y) {
 }
 
 function upd() {
-	target.x = find(target.y);
-	ctr.p2 = target;
-	source.p2 = target;
-	reflected.p1 = target;
-	reflected.ang = (center.y<=target.y?-1:1)*2*ctr.ref_ang() + (obj.y>=target.y?-1:1)*source.ref_ang();
+	for(var i = 0; i < n; i++) {
+		target[i].x = find(target[i].y);
+		ctr[i].p2 = target[i];
+		source[i].p2 = target[i];
+		reflected[i].p1 = target[i];
+		reflected[i].ang = (center.y<=target[i].y?-1:1)*2*ctr[i].ref_ang() + (obj.y>=target[i].y?-1:1)*source[i].ref_ang();
+	}
 }
 
-function angLinha() { return 180+(center.y<=target.y?-1:1)*ctr.ref_ang(); }
+function angLinha(i) { return 180+(center.y<=target[i].y?-1:1)*ctr[i].ref_ang(); }
+
+var now = 0;
 
 function targetUP() {
-	if(target.y <= mirror.c.y - 120) return;
-	target.y -= 5;
+	if(target[now].y <= mirror.c.y - mirror.width) return;
+	target[now].y -= 5;
 	desenhar();
 }
 function targetDOWN() {
-	if(target.y >= mirror.c.y + 120) return;
-	target.y += 5;
+	if(target[now].y >= mirror.c.y + mirror.width) return;
+	target[now].y += 5;
 	desenhar();
 }
+
+function down() { now += n - 1; now %= n; document.getElementById("qtd").innerHTML = now+1; }
+
+function up() { ++now; now %= n; document.getElementById("qtd").innerHTML = now+1;}
